@@ -1,0 +1,1023 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Skool Engagement Post Generator</title>
+<link href="https://fonts.googleapis.com/css2?family=Nunito:ital,wght@0,400;0,500;0,600;0,700;0,800;0,900;1,400&family=Syne:wght@600;700;800&family=DM+Mono:wght@400;500&display=swap" rel="stylesheet">
+<style>
+*,*::before,*::after{box-sizing:border-box;margin:0;padding:0}
+
+:root{
+  /* Skool Marketplace palette — pulled from the banner */
+  --green:#4a7c3f;
+  --green-bright:#6db560;
+  --green-glow:#8ed97f;
+  --green-light:#d4f0cc;
+  --green-pale:#eaf7e6;
+  --red:#c03a2b;
+  --red-warm:#e05a3a;
+  --blue:#1a5eb8;
+  --blue-bright:#2e80e0;
+  --blue-light:#d0e8ff;
+  --gold:#c8a84b;
+  --gold-light:#fdf3d0;
+
+  --white:#fdfffe;
+  --surface:rgba(255,255,255,0.82);
+  --surface2:#f3faf0;
+  --text:#1a2e18;
+  --text-mid:#3a5a35;
+  --text-soft:#6a8f64;
+  --border:rgba(74,124,63,0.18);
+  --radius:16px;
+  --radius-sm:10px;
+  --radius-pill:50px;
+}
+
+body{
+  font-family:'Nunito',sans-serif;
+  background:var(--green-pale);
+  min-height:100vh;
+  color:var(--text);
+  overflow-x:hidden;
+}
+
+body::before{
+  content:'';position:fixed;inset:0;pointer-events:none;z-index:0;
+  background:
+    radial-gradient(ellipse at 10% 0%,rgba(141,217,127,0.35) 0%,transparent 50%),
+    radial-gradient(ellipse at 90% 5%,rgba(46,128,224,0.18) 0%,transparent 40%),
+    radial-gradient(ellipse at 50% 100%,rgba(192,58,43,0.1) 0%,transparent 50%),
+    radial-gradient(ellipse at 75% 50%,rgba(200,168,75,0.1) 0%,transparent 40%);
+}
+
+/* ─── Marketplace Banner (top branding) ─── */
+.marketplace-banner{
+  position:relative;z-index:10;
+  background:linear-gradient(135deg,#1a3a15 0%,#2d5e25 40%,#1a4a35 70%,#0e2d4a 100%);
+  padding:0;overflow:hidden;
+  border-bottom:3px solid var(--green-glow);
+  box-shadow:0 4px 30px rgba(0,0,0,0.35),0 0 60px rgba(109,181,96,0.2);
+}
+.marketplace-banner::before{
+  content:'';position:absolute;inset:0;pointer-events:none;
+  background:
+    radial-gradient(ellipse at 20% 50%,rgba(109,181,96,0.25) 0%,transparent 50%),
+    radial-gradient(ellipse at 80% 50%,rgba(46,128,224,0.2) 0%,transparent 50%);
+}
+.banner-inner{
+  position:relative;z-index:1;
+  max-width:900px;margin:0 auto;
+  display:flex;align-items:center;justify-content:space-between;
+  padding:16px 28px;gap:16px;flex-wrap:wrap;
+}
+.banner-left{display:flex;align-items:center;gap:14px}
+.skool-wordmark{display:flex;align-items:center;gap:3px}
+.skool-s{font-family:'Syne',sans-serif;font-weight:800;font-size:28px;color:#e03a2b;line-height:1}
+.skool-k{font-family:'Syne',sans-serif;font-weight:800;font-size:28px;color:#1a5eb8;line-height:1}
+.skool-o{font-family:'Syne',sans-serif;font-weight:800;font-size:28px;color:#c8a84b;line-height:1}
+.skool-o2{font-family:'Syne',sans-serif;font-weight:800;font-size:28px;color:#4a7c3f;line-height:1}
+.skool-l{font-family:'Syne',sans-serif;font-weight:800;font-size:28px;color:#1a5eb8;line-height:1}
+.banner-divider{width:1px;height:36px;background:rgba(255,255,255,0.2)}
+.banner-taglines{display:flex;flex-direction:column;gap:2px}
+.banner-sub{font-family:'DM Mono',monospace;font-size:10px;letter-spacing:2px;text-transform:uppercase;color:rgba(255,255,255,0.5);font-weight:400}
+.banner-title{font-family:'Syne',sans-serif;font-weight:700;font-size:16px;color:#fff;line-height:1.2}
+.banner-right{display:flex;align-items:center;gap:10px}
+.banner-badge{
+  padding:6px 16px;border-radius:var(--radius-pill);font-size:11px;font-weight:800;
+  font-family:'Nunito',sans-serif;letter-spacing:0.5px;text-transform:uppercase;
+  background:linear-gradient(135deg,var(--green-bright),var(--green-glow));
+  color:#1a2e18;box-shadow:0 0 16px rgba(109,181,96,0.5);
+}
+.banner-by{font-size:12px;color:rgba(255,255,255,0.55);font-weight:500;font-family:'Nunito',sans-serif}
+.banner-by strong{color:rgba(255,255,255,0.9);font-weight:700}
+
+/* Glowing orbs decoration */
+.orb{position:absolute;border-radius:50%;pointer-events:none}
+.orb-1{width:120px;height:120px;right:-20px;top:-30px;background:radial-gradient(circle,rgba(46,128,224,0.3) 0%,transparent 70%)}
+.orb-2{width:80px;height:80px;left:10%;top:50%;transform:translateY(-50%);background:radial-gradient(circle,rgba(109,181,96,0.2) 0%,transparent 70%)}
+
+/* ─── Main wrapper ─── */
+.wrapper{position:relative;z-index:1;max-width:800px;margin:0 auto;padding:28px 20px 60px}
+
+/* ─── Header ─── */
+.header{text-align:center;margin:32px 0 28px}
+.header .eyebrow{
+  font-family:'DM Mono',monospace;font-size:10px;font-weight:500;
+  letter-spacing:2px;text-transform:uppercase;color:var(--text-soft);
+  margin-bottom:10px;display:block;
+}
+.header h1{
+  font-family:'Syne',sans-serif;font-weight:800;font-size:clamp(22px,4vw,30px);
+  line-height:1.2;margin-bottom:8px;
+  background:linear-gradient(135deg,var(--green),var(--blue-bright));
+  -webkit-background-clip:text;-webkit-text-fill-color:transparent;background-clip:text;
+}
+.header p{font-size:14px;color:var(--text-mid);font-weight:500;max-width:480px;margin:0 auto}
+
+/* ─── Section Tabs ─── */
+.section-tabs{
+  display:flex;gap:0;margin-bottom:28px;
+  background:rgba(255,255,255,0.55);backdrop-filter:blur(10px);
+  border:1px solid var(--border);border-radius:var(--radius-pill);
+  padding:4px;width:fit-content;margin-left:auto;margin-right:auto;
+  flex-wrap:wrap;justify-content:center;
+  box-shadow:0 2px 16px rgba(74,124,63,0.1);
+}
+.section-tab{
+  padding:9px 20px;border-radius:var(--radius-pill);border:none;
+  font-size:12px;font-weight:700;cursor:pointer;
+  background:transparent;color:var(--text-soft);
+  transition:all .2s;font-family:'Nunito',sans-serif;letter-spacing:0.3px;
+}
+.section-tab.active{
+  background:linear-gradient(135deg,var(--green),var(--green-bright));
+  color:#fff;box-shadow:0 2px 12px rgba(74,124,63,0.35),0 0 20px rgba(109,181,96,0.2);
+}
+.section-tab:hover:not(.active){color:var(--text);background:rgba(255,255,255,0.7)}
+
+/* ─── Panels ─── */
+.panel{display:none}
+.panel.visible{display:block;animation:fadeIn .3s ease}
+@keyframes fadeIn{from{opacity:0;transform:translateY(6px)}to{opacity:1;transform:none}}
+
+/* ─── Intent Pills ─── */
+.intent-bar{margin-bottom:16px}
+.intent-label{font-family:'DM Mono',monospace;font-size:10px;letter-spacing:1.5px;text-transform:uppercase;color:var(--text-soft);margin-bottom:8px;font-weight:500}
+.intent-pills{display:flex;gap:6px;flex-wrap:wrap}
+.intent-pill{
+  padding:6px 14px;border-radius:var(--radius-pill);
+  border:1px solid var(--border);font-size:11px;font-weight:600;
+  cursor:pointer;background:rgba(255,255,255,0.55);color:var(--text-mid);
+  transition:all .15s;font-family:'Nunito',sans-serif;
+}
+.intent-pill.active{
+  background:var(--green-light);border-color:var(--green-bright);color:var(--green);
+}
+.intent-pill:hover:not(.active){background:rgba(255,255,255,0.85);color:var(--text)}
+
+/* ─── Category Tabs ─── */
+.cat-tabs{display:flex;gap:6px;flex-wrap:wrap;margin-bottom:16px}
+.cat-tab{
+  padding:6px 14px;border-radius:var(--radius-pill);
+  border:1px solid var(--border);font-size:11px;font-weight:600;
+  cursor:pointer;background:rgba(255,255,255,0.5);color:var(--text-mid);
+  transition:all .15s;font-family:'Nunito',sans-serif;
+}
+.cat-tab.active{background:var(--green-bright);border-color:var(--green-bright);color:#fff;box-shadow:0 0 12px rgba(109,181,96,0.3)}
+.cat-tab:hover:not(.active){background:rgba(255,255,255,0.75);color:var(--text)}
+
+/* ─── Surprise Bar ─── */
+.surprise-bar{
+  display:flex;align-items:center;gap:12px;
+  padding:12px 18px;background:rgba(255,255,255,0.5);
+  border:1px solid var(--border);border-radius:var(--radius-sm);
+  margin-bottom:16px;backdrop-filter:blur(6px);
+}
+.surprise-bar p{font-size:13px;color:var(--text-mid);flex:1;font-weight:500}
+
+/* ─── Navigation ─── */
+.nav{display:flex;align-items:center;gap:10px;margin-bottom:12px}
+.nav-count{
+  font-family:'DM Mono',monospace;font-size:11px;
+  color:var(--text-soft);flex:1;text-align:center;letter-spacing:0.5px;
+}
+
+/* ─── Buttons ─── */
+.btn{
+  padding:8px 18px;border-radius:var(--radius-pill);
+  font-size:12px;font-weight:700;cursor:pointer;
+  border:1px solid var(--border);background:rgba(255,255,255,0.65);
+  color:var(--text-mid);transition:all .15s;font-family:'Nunito',sans-serif;
+  backdrop-filter:blur(4px);
+}
+.btn:hover{background:rgba(255,255,255,0.9);color:var(--text)}
+
+.btn-glow{
+  background:linear-gradient(135deg,var(--green),var(--green-bright));
+  border:none;color:#fff;box-shadow:0 2px 14px rgba(74,124,63,0.3),0 0 20px rgba(109,181,96,0.15);
+}
+.btn-glow:hover{box-shadow:0 4px 20px rgba(74,124,63,0.4),0 0 30px rgba(109,181,96,0.25);transform:translateY(-1px)}
+
+.btn-copy.copied{background:var(--green-light);color:var(--green);border-color:var(--green-bright)}
+
+/* ─── Cards ─── */
+.card{
+  background:rgba(255,255,255,0.78);
+  border:1px solid var(--border);border-radius:var(--radius);
+  padding:24px;backdrop-filter:blur(10px);
+  box-shadow:0 4px 24px rgba(74,124,63,0.1),0 0 0 1px rgba(109,181,96,0.06);
+}
+
+.card-top{display:flex;justify-content:space-between;align-items:center;margin-bottom:14px;flex-wrap:wrap;gap:8px}
+
+.badge{
+  font-family:'DM Mono',monospace;font-size:10px;font-weight:500;
+  padding:4px 12px;border-radius:var(--radius-pill);
+  background:linear-gradient(135deg,rgba(109,181,96,0.2),rgba(46,128,224,0.15));
+  color:var(--green);letter-spacing:0.5px;text-transform:uppercase;
+}
+.badge-intent{
+  font-family:'DM Mono',monospace;font-size:10px;font-weight:500;
+  padding:4px 12px;border-radius:var(--radius-pill);
+  background:rgba(192,58,43,0.1);color:var(--red);
+  letter-spacing:0.5px;
+}
+
+.cat-label{font-size:11px;color:var(--text-soft);font-weight:600}
+
+.post-text{
+  font-size:15px;line-height:1.8;color:var(--text);
+  margin-bottom:14px;white-space:pre-wrap;font-weight:400;
+}
+
+.gif-pill{
+  display:inline-flex;align-items:center;gap:7px;
+  font-size:11px;color:var(--text-mid);padding:5px 14px;
+  background:rgba(200,168,75,0.12);border:1px solid rgba(200,168,75,0.25);
+  border-radius:var(--radius-pill);margin-bottom:4px;font-weight:500;
+}
+.gif-label{
+  font-family:'DM Mono',monospace;font-size:9px;font-weight:500;
+  color:var(--gold);letter-spacing:1px;text-transform:uppercase;
+}
+
+.best-for{
+  font-size:11px;color:var(--text-soft);font-weight:500;
+  margin-bottom:14px;font-style:italic;
+}
+
+.skool-hints{
+  margin-top:14px;padding:14px;
+  background:rgba(212,240,204,0.4);border-radius:var(--radius-sm);
+  border:1px solid rgba(109,181,96,0.15);
+}
+.skool-hints-title{
+  font-family:'DM Mono',monospace;font-size:10px;font-weight:500;
+  letter-spacing:1.5px;text-transform:uppercase;color:var(--green);
+  margin-bottom:8px;
+}
+.skool-hint{font-size:12px;color:var(--text-mid);line-height:1.6;margin-bottom:4px}
+.skool-hint:last-child{margin-bottom:0}
+
+.actions{display:flex;gap:8px;flex-wrap:wrap;padding-top:14px;border-top:1px solid var(--border)}
+
+/* ─── Form Fields ─── */
+.form-intro{font-size:13px;color:var(--text-mid);margin-bottom:18px;line-height:1.7}
+
+.field-row{display:flex;gap:12px;flex-wrap:wrap;margin-bottom:14px}
+.field-group{display:flex;flex-direction:column;gap:5px;flex:1;min-width:160px}
+.field-group label{
+  font-family:'DM Mono',monospace;font-size:10px;font-weight:500;
+  color:var(--text-soft);letter-spacing:1px;text-transform:uppercase;
+}
+.field-group input,.field-group select,.field-group textarea{
+  padding:10px 14px;border-radius:var(--radius-sm);
+  border:1px solid var(--border);font-size:13px;
+  font-family:'Nunito',sans-serif;
+  background:rgba(255,255,255,0.75);color:var(--text);outline:none;
+  transition:all .15s;
+}
+.field-group input:focus,.field-group select:focus,.field-group textarea:focus{
+  border-color:var(--green-bright);background:#fff;
+  box-shadow:0 0 0 3px rgba(109,181,96,0.15);
+}
+.field-group textarea{resize:vertical;min-height:60px}
+
+.gen-btn{
+  display:inline-flex;align-items:center;gap:8px;
+  padding:12px 28px;border-radius:var(--radius-pill);border:none;
+  font-size:13px;font-weight:700;cursor:pointer;
+  background:linear-gradient(135deg,var(--green),var(--green-bright));
+  color:#fff;font-family:'Nunito',sans-serif;
+  letter-spacing:0.3px;transition:all .2s;
+  box-shadow:0 3px 16px rgba(74,124,63,0.3),0 0 24px rgba(109,181,96,0.15);
+  margin-top:4px;
+}
+.gen-btn:hover{box-shadow:0 5px 22px rgba(74,124,63,0.4),0 0 32px rgba(109,181,96,0.25);transform:translateY(-1px)}
+.gen-btn:disabled{opacity:0.5;cursor:not-allowed;transform:none}
+
+/* ─── AI Output Cards ─── */
+.ai-card{
+  background:rgba(255,255,255,0.82);border:1px solid var(--border);
+  border-radius:var(--radius);padding:24px;backdrop-filter:blur(10px);
+  box-shadow:0 4px 24px rgba(74,124,63,0.1);margin-top:18px;
+}
+.ai-title{
+  font-family:'Syne',sans-serif;font-weight:700;
+  font-size:18px;color:var(--text);margin-bottom:4px;
+}
+.ai-sub{font-size:13px;color:var(--text-mid);margin-bottom:14px}
+
+.ai-questions{list-style:none;display:flex;flex-direction:column;gap:6px;margin-bottom:14px}
+.ai-questions li{
+  font-size:14px;color:var(--text);line-height:1.6;
+  padding:9px 14px;
+  background:linear-gradient(135deg,rgba(212,240,204,0.45),rgba(208,232,255,0.2));
+  border-radius:var(--radius-sm);border:1px solid rgba(109,181,96,0.12);
+}
+
+.ai-followup{
+  padding:12px 14px;background:rgba(253,243,208,0.4);
+  border-radius:var(--radius-sm);border:1px solid rgba(200,168,75,0.2);
+  font-size:12px;color:var(--text-mid);line-height:1.6;margin-bottom:14px;
+}
+.ai-followup strong{color:var(--red-warm);font-weight:700}
+
+.ai-actions{display:flex;gap:8px;flex-wrap:wrap;padding-top:14px;border-top:1px solid var(--border)}
+
+.ai-loading{text-align:center;padding:40px 16px;color:var(--text-soft);font-size:14px}
+.ai-loading .spinner{
+  display:inline-block;width:24px;height:24px;
+  border:3px solid rgba(74,124,63,0.2);border-top-color:var(--green-bright);
+  border-radius:50%;animation:spin .7s linear infinite;margin-bottom:10px;
+}
+@keyframes spin{to{transform:rotate(360deg)}}
+
+.ai-error{
+  padding:12px 16px;background:rgba(192,58,43,0.08);
+  border:1px solid rgba(192,58,43,0.2);border-radius:var(--radius-sm);
+  color:#6b1a10;font-size:13px;margin-top:14px;
+}
+
+/* ─── Ritual Cards ─── */
+.ritual-day{
+  background:rgba(255,255,255,0.68);border:1px solid var(--border);
+  border-radius:var(--radius);padding:18px;margin-bottom:10px;
+  backdrop-filter:blur(6px);
+}
+.ritual-day-header{display:flex;align-items:center;gap:10px;margin-bottom:10px}
+.ritual-day-badge{
+  font-family:'DM Mono',monospace;font-size:10px;font-weight:500;
+  padding:4px 12px;border-radius:var(--radius-pill);
+  background:linear-gradient(135deg,var(--green),var(--blue-bright));
+  color:#fff;letter-spacing:0.5px;
+}
+.ritual-day-type{font-size:11px;color:var(--text-soft);font-weight:600;text-transform:uppercase;letter-spacing:0.5px}
+.ritual-post-text{font-size:14px;line-height:1.7;color:var(--text);white-space:pre-wrap;margin-bottom:10px}
+.ritual-copy-btn{
+  padding:6px 14px;border-radius:var(--radius-pill);font-size:11px;
+  font-weight:700;cursor:pointer;border:1px solid var(--border);
+  background:rgba(255,255,255,0.65);color:var(--text-mid);
+  font-family:'Nunito',sans-serif;transition:all .15s;
+}
+.ritual-copy-btn:hover{background:rgba(255,255,255,0.9)}
+.ritual-copy-btn.copied{background:var(--green-light);color:var(--green)}
+
+/* ─── Bottom Branding Banner ─── */
+.brand-footer{
+  position:relative;
+  background:linear-gradient(135deg,#0e2d4a 0%,#1a3a15 50%,#2d1a10 100%);
+  border-top:3px solid var(--green-bright);
+  overflow:hidden;
+  box-shadow:0 -4px 30px rgba(0,0,0,0.2);
+}
+.brand-footer::before{
+  content:'';position:absolute;inset:0;pointer-events:none;
+  background:
+    radial-gradient(ellipse at 30% 50%,rgba(109,181,96,0.2) 0%,transparent 60%),
+    radial-gradient(ellipse at 70% 50%,rgba(192,58,43,0.15) 0%,transparent 60%);
+}
+.brand-footer-inner{
+  position:relative;z-index:1;
+  max-width:900px;margin:0 auto;padding:20px 28px;
+  display:flex;align-items:center;justify-content:space-between;
+  flex-wrap:wrap;gap:12px;
+}
+.brand-footer-left{display:flex;flex-direction:column;gap:4px}
+.brand-footer-title{font-family:'Syne',sans-serif;font-weight:800;font-size:14px;color:#fff;letter-spacing:0.3px}
+.brand-footer-sub{font-size:11px;color:rgba(255,255,255,0.5);font-family:'DM Mono',monospace;letter-spacing:1px;text-transform:uppercase}
+.brand-footer-pills{display:flex;gap:6px;flex-wrap:wrap}
+.brand-pill{
+  padding:4px 12px;border-radius:var(--radius-pill);font-size:10px;font-weight:700;
+  font-family:'Nunito',sans-serif;letter-spacing:0.5px;text-transform:uppercase;
+}
+.brand-pill-red{background:rgba(192,58,43,0.25);color:#e07a70;border:1px solid rgba(192,58,43,0.3)}
+.brand-pill-blue{background:rgba(46,128,224,0.2);color:#7ab4f0;border:1px solid rgba(46,128,224,0.25)}
+.brand-pill-green{background:rgba(109,181,96,0.2);color:var(--green-glow);border:1px solid rgba(109,181,96,0.25)}
+.brand-pill-gold{background:rgba(200,168,75,0.2);color:#e0c06a;border:1px solid rgba(200,168,75,0.25)}
+
+.brand-footer-right{text-align:right}
+.brand-footer-cta{
+  display:inline-block;padding:9px 22px;border-radius:var(--radius-pill);
+  background:linear-gradient(135deg,var(--green-bright),var(--green-glow));
+  color:#1a2e18;font-weight:800;font-size:12px;font-family:'Nunito',sans-serif;
+  text-decoration:none;box-shadow:0 0 20px rgba(109,181,96,0.4);
+  transition:all .2s;letter-spacing:0.3px;
+}
+.brand-footer-cta:hover{box-shadow:0 0 30px rgba(109,181,96,0.55);transform:translateY(-1px)}
+.brand-footer-by{font-size:11px;color:rgba(255,255,255,0.4);margin-top:5px;font-family:'DM Mono',monospace}
+.brand-footer-by strong{color:rgba(255,255,255,0.75)}
+
+/* ─── Empty / Footer ─── */
+.empty{text-align:center;padding:40px 16px;color:var(--text-soft);font-size:14px}
+
+/* ─── Responsive ─── */
+@media(max-width:600px){
+  .wrapper{padding:16px 12px 40px}
+  .section-tabs{flex-wrap:wrap;width:100%}
+  .section-tab{flex:1;min-width:0;padding:9px 10px;font-size:11px;text-align:center}
+  .card,.ai-card{padding:18px}
+  .field-row{flex-direction:column}
+  .field-group{min-width:0}
+  .banner-inner{padding:12px 16px}
+  .banner-right{display:none}
+  .brand-footer-inner{flex-direction:column;align-items:flex-start}
+  .brand-footer-right{text-align:left}
+}
+</style>
+</head>
+<body>
+
+<!-- ════════════════════════════════════
+     TOP: SKOOL COMMUNITY MARKETPLACE BANNER
+     ════════════════════════════════════ -->
+<div class="marketplace-banner">
+  <div class="orb orb-1"></div>
+  <div class="orb orb-2"></div>
+  <div class="banner-inner">
+    <div class="banner-left">
+      <div class="skool-wordmark">
+        <span class="skool-s">s</span><span class="skool-k">k</span><span class="skool-o">o</span><span class="skool-o2">o</span><span class="skool-l">l</span>
+      </div>
+      <div class="banner-divider"></div>
+      <div class="banner-taglines">
+        <span class="banner-sub">Engagement Made Easy</span>
+        <span class="banner-title">Skool Community Tools</span>
+      </div>
+    </div>
+    <div class="banner-right">
+      <span class="banner-by">for <strong>Skool community owners</strong></span>
+      <a class="banner-badge" href="https://www.skool.com/skool-community-marketplace-9239/about" target="_blank" style="text-decoration:none">Explore Skool</a>
+    </div>
+  </div>
+</div>
+
+<div class="wrapper">
+
+<div class="header">
+  <span class="eyebrow">engagement + community growth</span>
+  <h1>Skool Post Generator ✦</h1>
+  <p>Ready-to-post prompts that spark real conversations and keep your Skool community engaged — for any niche.</p>
+</div>
+
+<div class="section-tabs">
+  <button class="section-tab active" onclick="switchPanel('posts')">Engagement Posts</button>
+  <button class="section-tab" onclick="switchPanel('tot')">This or That ✨</button>
+  <button class="section-tab" onclick="switchPanel('polls')">Polls</button>
+  <button class="section-tab" onclick="switchPanel('rituals')">Weekly Rituals</button>
+</div>
+
+<!-- PANEL 1: ENGAGEMENT POSTS -->
+<div class="panel visible" id="panel-posts">
+  <div class="intent-bar">
+    <div class="intent-label">What's your goal?</div>
+    <div class="intent-pills" id="intent-pills"></div>
+  </div>
+  <div class="cat-tabs" id="cat-tabs"></div>
+  <div class="surprise-bar">
+    <p>Want something random? ✨</p>
+    <button class="btn btn-glow" onclick="showRandom()">Surprise me</button>
+  </div>
+  <div id="nav-area" style="display:none" class="nav">
+    <button class="btn" onclick="prevPost()">← Prev</button>
+    <span class="nav-count" id="nav-count"></span>
+    <button class="btn" onclick="nextPost()">Next →</button>
+  </div>
+  <div id="posts-container"></div>
+</div>
+
+<!-- PANEL 2: THIS OR THAT -->
+<div class="panel" id="panel-tot">
+  <p class="form-intro">Tell us about your community and we'll generate 6 on-brand This or That questions — ready to copy straight into Skool.</p>
+  <div class="field-row">
+    <div class="field-group">
+      <label>Your niche</label>
+      <input type="text" id="tot-niche" placeholder="e.g. fitness coaches, photographers, real estate investors">
+    </div>
+    <div class="field-group">
+      <label>Vibe</label>
+      <select id="tot-vibe">
+        <option value="fun and playful">Fun &amp; playful</option>
+        <option value="professional and focused">Professional &amp; focused</option>
+        <option value="educational and value-driven">Educational &amp; value-driven</option>
+        <option value="lifestyle and values">Lifestyle &amp; values</option>
+        <option value="mix of education and fun">Education + fun mix</option>
+      </select>
+    </div>
+  </div>
+  <div class="field-row">
+    <div class="field-group">
+      <label>Theme (optional)</label>
+      <input type="text" id="tot-theme" placeholder="e.g. morning routines, tools &amp; software, work habits">
+    </div>
+    <div class="field-group">
+      <label>Energy</label>
+      <select id="tot-energy">
+        <option value="spicy and bold">Spicy &amp; bold 🔥</option>
+        <option value="warm and curious">Warm &amp; curious 🌱</option>
+        <option value="silly and fun">Silly &amp; fun 😂</option>
+        <option value="thoughtful and reflective">Thoughtful &amp; reflective 💭</option>
+      </select>
+    </div>
+  </div>
+  <button class="gen-btn" id="tot-btn" onclick="generateToT()">Generate questions ✨</button>
+  <div id="tot-output"></div>
+</div>
+
+<!-- PANEL 3: POLLS -->
+<div class="panel" id="panel-polls">
+  <p class="form-intro">Generate Skool-ready poll posts that help you connect with your community, learn what they need, and warm them up for your offers — all without feeling salesy.</p>
+  <div class="field-row">
+    <div class="field-group">
+      <label>Your niche</label>
+      <input type="text" id="poll-niche" placeholder="e.g. fitness coaches, online course creators">
+    </div>
+    <div class="field-group">
+      <label>Poll type</label>
+      <select id="poll-type">
+        <option value="multiple choice (3-4 options)">Multiple choice</option>
+        <option value="this or that (binary)">This or That</option>
+        <option value="yes/no with a twist">Yes / No</option>
+        <option value="rating or scale (1-10)">Rating 1–10</option>
+        <option value="have you ever">Have you ever…?</option>
+      </select>
+    </div>
+  </div>
+  <div class="field-row">
+    <div class="field-group">
+      <label>Intent</label>
+      <select id="poll-intent">
+        <option value="warm up the room and get engagement">Warm up the room</option>
+        <option value="learn what my people need (market research)">Learn about my people</option>
+        <option value="prep for a launch or offer">Prep for a launch</option>
+        <option value="post-lesson implementation check-in">After a lesson</option>
+        <option value="business strategy and growth">Business &amp; growth</option>
+        <option value="pure fun and vibes">Just for fun</option>
+      </select>
+    </div>
+    <div class="field-group">
+      <label>Vibe</label>
+      <select id="poll-vibe">
+        <option value="fun and playful">Fun &amp; playful</option>
+        <option value="deep and thought-provoking">Deep &amp; thought-provoking</option>
+        <option value="business focused">Business focused</option>
+        <option value="warm and supportive">Warm &amp; supportive</option>
+      </select>
+    </div>
+  </div>
+  <div class="field-row">
+    <div class="field-group" style="flex:2">
+      <label>Topic (optional)</label>
+      <input type="text" id="poll-topic" placeholder="e.g. productivity tools, client getting, content creation">
+    </div>
+  </div>
+  <button class="gen-btn" id="poll-btn" onclick="generatePoll()">Generate poll ✨</button>
+  <div id="poll-output"></div>
+</div>
+
+<!-- PANEL 4: WEEKLY RITUALS -->
+<div class="panel" id="panel-rituals">
+  <p class="form-intro">Generate a full week of Skool engagement posts — one for each day with a specific ritual or theme. Copy them all at once or day by day.</p>
+  <div class="field-row">
+    <div class="field-group">
+      <label>Your niche</label>
+      <input type="text" id="rit-niche" placeholder="e.g. fitness coaches, dog trainers, SaaS founders">
+    </div>
+    <div class="field-group">
+      <label>Community vibe</label>
+      <select id="rit-vibe">
+        <option value="warm, supportive, and encouraging">Warm &amp; supportive</option>
+        <option value="business savvy, direct, empowering">Business savvy &amp; direct</option>
+        <option value="educational and value-driven">Educational &amp; value-driven</option>
+        <option value="fun, casual, and community-first">Fun &amp; casual</option>
+      </select>
+    </div>
+  </div>
+  <div class="field-row">
+    <div class="field-group" style="flex:2">
+      <label>Anything to focus on this week? (optional)</label>
+      <input type="text" id="rit-focus" placeholder="e.g. launching a new offer, celebrating a milestone, a big industry event">
+    </div>
+  </div>
+  <button class="gen-btn" id="rit-btn" onclick="generateRituals()">Generate my ritual week ✨</button>
+  <div id="rit-output"></div>
+</div>
+
+</div><!-- end .wrapper -->
+
+<!-- ════════════════════════════════════
+     BOTTOM: BRANDING FOOTER BANNER
+     ════════════════════════════════════ -->
+<div class="brand-footer">
+  <div class="brand-footer-inner">
+    <div class="brand-footer-left">
+      <div class="brand-footer-title">✦ Skool Engagement Post Generator</div>
+      <div class="brand-footer-sub">For Skool community owners in any niche</div>
+      <div class="brand-footer-pills" style="margin-top:6px">
+        <span class="brand-pill brand-pill-green">Spark Conversations</span>
+        <span class="brand-pill brand-pill-blue">Grow Your Community</span>
+        <span class="brand-pill brand-pill-red">Drive to Classroom</span>
+        <span class="brand-pill brand-pill-gold">Any Niche, Any Size</span>
+      </div>
+    </div>
+    <div class="brand-footer-right">
+      <a class="brand-footer-cta" href="https://www.skool.com/skool-community-marketplace-9239/about" target="_blank">Explore Skool →</a>
+      <div class="brand-footer-by">Built with ✦ for <strong>Skool owners everywhere</strong></div>
+    </div>
+  </div>
+</div>
+
+<script>
+/* ═══════════════════════════════════════════════
+   DATA: ENGAGEMENT POST LIBRARY
+   ═══════════════════════════════════════════════ */
+const library = [
+  {cat:"Community Vibes",intent:"Warm up",type:"Unpopular Opinion",best:"New & cold members",text:"Unpopular opinion in your niche? Go. 👇\n(drop yours below — no softening it 😂)",gif:"Judge Judy leaning forward",followUp:"Love this — now tell us WHY you believe it so deeply."},
+  {cat:"Community Vibes",intent:"Warm up",type:"Vibe Check",best:"Any day, any stage",text:"Current work/business vibe check — which era are you in? 😅\n\n🌱 planting seeds\n🔥 on fire\n😴 rest era\n🤯 figuring it out",gif:"Someone checking vibes with sunglasses",followUp:"Whatever era you're in — it's valid. What would make this week feel more aligned?"},
+  {cat:"Community Vibes",intent:"Warm up",type:"Rate Your Niche",best:"Established community",text:"Rate your niche's drama level 1–10 😂\n(1 = zen af, 10 = I need a therapist after every client call)",gif:"Someone slowly raising their hand",followUp:"Okay but what's the MOST dramatic thing you've seen? (no names obviously 😂)"},
+  {cat:"Community Vibes",intent:"Warm up",type:"Two Truths One Lie",best:"Getting-to-know-you phase",text:"Two truths and a lie about your business.\nGo. We'll guess 👇😂",gif:"Wheel of Fortune spinning",followUp:"Time to reveal — which one was the lie?!"},
+  {cat:"Community Vibes",intent:"Warm up",type:"Day In The Life",best:"New members",text:"Describe your work day today in 3 emojis.\nI'll go first: ☕💻📋\n\nYour turn 👇",gif:"Fast-forward montage of someone's day",followUp:"Love seeing how different everyone's flow is. Anyone else surprised by the patterns?"},
+  {cat:"Wins & Brags",intent:"Credibility",type:"Humble Brag Pass",best:"Warm community",text:"Humble brag pass — go. 🏆\nOne win. Recent. Real. Drop it.",gif:"Legally Blonde 'what, like it's hard?'",followUp:"THIS is what I love about this community. Y'all are actually doing the work."},
+  {cat:"Wins & Brags",intent:"Credibility",type:"Client Messages",best:"Service providers & coaches",text:"What's a message from a client or customer you screenshot and saved forever? 💌\nYou don't have to share it word for word — just tell us what it said. Those are the ones that matter.",gif:"Someone crying happy tears",followUp:"These messages are proof your work changes people's lives. Never forget that."},
+  {cat:"Wins & Brags",intent:"Credibility",type:"Quick Win",best:"Post-lesson or challenge",text:"What's the fastest win you've gotten a client in the last 30 days? ⚡\nShare it below in 2–3 sentences. Let's celebrate each other.",gif:"Confetti explosion",followUp:"This thread is basically a testimonial goldmine. Screenshot it. 📸"},
+  {cat:"Wins & Brags",intent:"Credibility",type:"Before / After",best:"Warm members, pre-launch",text:"Before working with me, my clients usually feel ___.\nAfter a few weeks together, they start to ___.\n\nDrop your before/after in the comments ✨",gif:"Butterfly transformation montage",followUp:"Reading these transformations is everything. What made the biggest shift?"},
+  {cat:"Hot Takes",intent:"Boost comments",type:"Hot Take Roulette",best:"Mid-week energy boost",text:"I'll start: most people in [your niche] are leaving money on the table not because of their pricing — but because of how they're communicating their value. 🔥\n\nAgree, disagree, or add yours below 👇",gif:"Throwing a grenade and walking away",followUp:"Okay the replies are SPICY. Who's got the hottest take so far?"},
+  {cat:"Hot Takes",intent:"Boost comments",type:"Controversial Take",best:"Established community",text:"Drop your most controversial take about your industry 🔥\nOne sentence. No caveats.",gif:"Mic drop",followUp:"I love that nobody held back. Which one made you think the most?"},
+  {cat:"Hot Takes",intent:"Boost comments",type:"The Ick List",best:"Any stage",text:"What's your biggest industry ick? 😬\nDrop yours below — let's build the do-not-do list together.",gif:"Full body shudder/cringe reaction",followUp:"Okay we officially have a community ick list. Printing this out immediately."},
+  {cat:"Hot Takes",intent:"Boost comments",type:"Myth Buster",best:"Authority building",text:"Name one piece of 'common advice' in your field that's actually terrible. 🙅\n\nI'll go first...",gif:"Explosion demolishing a building",followUp:"The fact that we all agreed on like 3 of these says EVERYTHING."},
+  {cat:"Fill in the Blank",intent:"Boost comments",type:"Finish The Sentence",best:"Any day",text:"Finish this sentence:\n\"My clients always come to me because ___\" ✨\n\nDrop it below. No overthinking.",gif:"Someone furiously typing",followUp:"Read your answer back to yourself. That's your next piece of content. You're welcome. 😉"},
+  {cat:"Fill in the Blank",intent:"Warm up",type:"Client Roast",best:"Fun community day",text:"My clients would roast me for ___\n\nI'll go first 👇",gif:"Sitting around a campfire roasting marshmallows",followUp:"We are NOT the same and I love that. Which one made you laugh the hardest?"},
+  {cat:"Fill in the Blank",intent:"Warm up",type:"Permission Post",best:"Low energy days",text:"Give us permission to do something today 🫶\nOne sentence. Something your audience needs to hear.",gif:"Warm hug energy",followUp:"Screenshot the one that hits the hardest. Someone needed that today."},
+  {cat:"Fill in the Blank",intent:"Boost comments",type:"The Real Reason",best:"Pre-launch warmup",text:"The REAL reason I started my business was ___.\n(Not the polished version. The real one.)\n\nGo 👇",gif:"Truth bomb explosion",followUp:"These answers are why this community is different. Raw and real."},
+  {cat:"Your Magic",intent:"Share your magic",type:"60-Second Teaching",best:"Authority building",text:"Teach us something in 60 seconds or less 🎉\nWhat's one thing your audience pays you to know?",gif:"Someone nodding furiously",followUp:"Okay this thread just became a free masterclass. Who's bookmarking this?"},
+  {cat:"Your Magic",intent:"Share your magic",type:"Your Unique Approach",best:"Warm community",text:"What does your business look like when you're fully in your zone of genius? ✨\nShare one thing that changed when you stopped doing it the 'normal' way.",gif:"Person hitting their stride running",followUp:"This is what working in your strengths looks like. No two answers the same."},
+  {cat:"Your Magic",intent:"Share your magic",type:"Top Question",best:"Content ideas day",text:"What's the #1 question your audience always asks you? 💬\nAnswer it in 3 sentences or less.",gif:"Someone pointing finger guns",followUp:"Every single answer here is a content idea or offer waiting to happen. You're sitting on gold."},
+  {cat:"Your Magic",intent:"Share your magic",type:"Founder Story",best:"New member welcome",text:"Who do you help and what transformation do you create? 🙋\nWrite it like you'd say it to a stranger at a coffee shop.",gif:"Coffee shop conversation",followUp:"Love these intros. If you see someone whose work resonates — tell them. That's how collabs start."},
+  {cat:"Your Magic",intent:"Share your magic",type:"Niche Flex",best:"Fun day / icebreaker",text:"What's the most specific or unexpected thing you help people with? 😂\nBonus points if it makes me say 'wait that's a thing?!'",gif:"Double take reaction",followUp:"I just learned about 12 things I didn't know existed and I'm fascinated."},
+  {cat:"Drive to Classroom",intent:"Drive to classroom",type:"Implementation Thread",best:"Post-lesson day",text:"Okay — who watched [LESSON NAME] this week? 🎓\n\nDrop ONE thing you're going to implement from it.\nBonus: tell us WHEN you'll do it. Accountability = magic.",gif:"Person taking notes intensely",followUp:"Coming back to check on y'all in 48 hours. You've been warned. 😂"},
+  {cat:"Drive to Classroom",intent:"Drive to classroom",type:"Lesson Teaser",best:"Pre-lesson day",text:"New lesson just dropped in the classroom 🔥\n\nInside you'll learn:\n→ [Key point 1]\n→ [Key point 2]\n→ [Key point 3]\n\nGo watch it and drop your biggest takeaway below ✨",gif:"Someone excitedly opening a gift",followUp:"The takeaways y'all are sharing are SO good. Who hasn't watched yet? Go. Now. 😂"},
+  {cat:"Drive to Classroom",intent:"Drive to classroom",type:"Challenge Post",best:"During a challenge",text:"Day [X] check-in! 💪\n\nDid you do the thing? Drop a ✅ if yes.\nDrop a 🙋 if you need help.\nDrop a 😴 if you're catching up.\n\nNo judgment — just accountability.",gif:"Coach giving a pep talk",followUp:"Catching up counts. Starting late counts. Being here counts. Let's keep going."},
+  {cat:"Launch Support",intent:"Launch support",type:"Offer Tease",best:"Pre-launch week",text:"Something new is coming and I literally cannot stop thinking about it. 👀\n\nHint: it's going to help you ___.\n\nDrop a 🔮 if you want to be first to know.",gif:"Curtain about to open",followUp:"The 🔮s are rolling in. DM me 'READY' and I'll make sure you hear about it first."},
+  {cat:"Launch Support",intent:"Launch support",type:"Objection Buster",best:"Cart open period",text:"Real talk: what's the ONE thing stopping you from going all-in on [OFFER/GOAL]? 🤔\n\nNo wrong answers. Let's work through it together.",gif:"Person thinking deeply",followUp:"Thank you for being honest. Let me address these one by one because I see you."},
+  {cat:"Launch Support",intent:"Launch support",type:"Social Proof Drop",best:"During launch",text:"Just got this message from someone inside [PROGRAM NAME]:\n\n\"[Paraphrased testimonial]\"\n\nThis is why I do what I do. 🥹\n\nIf you're on the fence — what questions do you have?",gif:"Standing ovation crowd",followUp:"DM me 'INFO' and I'll send you everything you need to decide."},
+];
+
+const categories = [...new Set(library.map(p=>p.cat))];
+const intents = [...new Set(library.map(p=>p.intent))];
+
+let activeIntent = null;
+let activeCat = null;
+let currentIdx = 0;
+
+function getFiltered(){
+  return library.filter(p=>{
+    if(activeIntent && p.intent!==activeIntent) return false;
+    if(activeCat && p.cat!==activeCat) return false;
+    return true;
+  });
+}
+
+function renderIntentPills(){
+  const c=document.getElementById('intent-pills');
+  c.innerHTML='';
+  const all=document.createElement('button');
+  all.className='intent-pill'+(activeIntent===null?' active':'');
+  all.textContent='All';
+  all.onclick=()=>{activeIntent=null;currentIdx=0;renderIntentPills();renderCatTabs();renderPosts()};
+  c.appendChild(all);
+  intents.forEach(i=>{
+    const b=document.createElement('button');
+    b.className='intent-pill'+(activeIntent===i?' active':'');
+    b.textContent=i.charAt(0).toUpperCase()+i.slice(1);
+    b.onclick=()=>{activeIntent=i;currentIdx=0;renderIntentPills();renderCatTabs();renderPosts()};
+    c.appendChild(b);
+  });
+}
+
+function renderCatTabs(){
+  const c=document.getElementById('cat-tabs');
+  c.innerHTML='';
+  const filteredCats = activeIntent
+    ? [...new Set(library.filter(p=>p.intent===activeIntent).map(p=>p.cat))]
+    : categories;
+  const all=document.createElement('button');
+  all.className='cat-tab'+(activeCat===null?' active':'');
+  all.textContent='All';
+  all.onclick=()=>{activeCat=null;currentIdx=0;renderCatTabs();renderPosts()};
+  c.appendChild(all);
+  filteredCats.forEach(cat=>{
+    const b=document.createElement('button');
+    b.className='cat-tab'+(activeCat===cat?' active':'');
+    b.textContent=cat;
+    b.onclick=()=>{activeCat=cat;currentIdx=0;renderCatTabs();renderPosts()};
+    c.appendChild(b);
+  });
+  if(activeCat && !filteredCats.includes(activeCat)){activeCat=null;renderCatTabs()}
+}
+
+function renderPosts(){
+  const posts=getFiltered();
+  const container=document.getElementById('posts-container');
+  const nav=document.getElementById('nav-area');
+  container.innerHTML='';
+
+  if(!posts.length){container.innerHTML='<div class="empty">No posts match this filter. Try a different combo!</div>';nav.style.display='none';return}
+  if(currentIdx>=posts.length) currentIdx=0;
+
+  nav.style.display='flex';
+  document.getElementById('nav-count').textContent=(currentIdx+1)+' of '+posts.length;
+
+  const p=posts[currentIdx];
+  window._currentPost = p.text;
+  window._currentFollowUp = p.followUp;
+
+  container.innerHTML=`
+    <div class="card">
+      <div class="card-top">
+        <div style="display:flex;gap:6px;flex-wrap:wrap">
+          <span class="badge">${p.type}</span>
+          <span class="badge-intent">${p.intent}</span>
+        </div>
+        <span class="cat-label">${p.cat}</span>
+      </div>
+      <div class="post-text">${p.text}</div>
+      <div class="best-for">Best for: ${p.best}</div>
+      <div class="gif-pill"><span class="gif-label">GIF</span>${p.gif}</div>
+      <div class="skool-hints">
+        <div class="skool-hints-title">💬 Host Follow-Up Comment</div>
+        <div class="skool-hint">${p.followUp}</div>
+      </div>
+      <div class="actions">
+        <button class="btn btn-copy" onclick="copyText(this, window._currentPost)">Copy post</button>
+        <button class="btn" onclick="copyText(this, window._currentFollowUp)">Copy follow-up</button>
+      </div>
+    </div>
+  `;
+}
+
+function prevPost(){const p=getFiltered();currentIdx=(currentIdx-1+p.length)%p.length;renderPosts()}
+function nextPost(){const p=getFiltered();currentIdx=(currentIdx+1)%p.length;renderPosts()}
+function showRandom(){const p=getFiltered();currentIdx=Math.floor(Math.random()*p.length);renderPosts()}
+
+function copyText(btn,text){
+  try{
+    const ta=document.createElement('textarea');
+    ta.value=text;
+    ta.style.cssText='position:fixed;top:0;left:0;opacity:0;pointer-events:none';
+    document.body.appendChild(ta);
+    ta.focus();ta.select();
+    document.execCommand('copy');
+    document.body.removeChild(ta);
+    const orig=btn.textContent;btn.textContent='Copied!';btn.classList.add('copied');
+    setTimeout(()=>{btn.textContent=orig;btn.classList.remove('copied')},2000);
+  }catch(e){
+    if(navigator.clipboard){
+      navigator.clipboard.writeText(text).then(()=>{
+        const orig=btn.textContent;btn.textContent='Copied!';btn.classList.add('copied');
+        setTimeout(()=>{btn.textContent=orig;btn.classList.remove('copied')},2000);
+      }).catch(()=>{alert('Copy failed — please select the text manually.')});
+    }
+  }
+}
+
+function switchPanel(id){
+  document.querySelectorAll('.panel').forEach(p=>p.classList.remove('visible'));
+  document.getElementById('panel-'+id).classList.add('visible');
+  document.querySelectorAll('.section-tab').forEach((t,i)=>{
+    const ids=['posts','tot','polls','rituals'];
+    t.classList.toggle('active',ids[i]===id);
+  });
+}
+
+/* ═══════════════════════════════════════════════
+   THIS OR THAT GENERATOR
+   ═══════════════════════════════════════════════ */
+async function generateToT(){
+  const niche=document.getElementById('tot-niche').value.trim()||'online community members';
+  const vibe=document.getElementById('tot-vibe').value;
+  const theme=document.getElementById('tot-theme').value.trim();
+  const energy=document.getElementById('tot-energy').value;
+  const btn=document.getElementById('tot-btn');
+  const out=document.getElementById('tot-output');
+
+  btn.disabled=true;btn.textContent='Generating...';
+  out.innerHTML='<div class="ai-loading"><div class="spinner"></div><br>Crafting your questions...</div>';
+
+  const themeNote=theme?'Theme the questions around: '+theme+'.':'Mix themes — work habits, tools, energy/mindset, lifestyle, business strategy.';
+
+  const prompt=`You are writing a "This or That Fridays" post for a Skool community of ${niche}. Tone: ${vibe}. Energy: ${energy}. ${themeNote}
+
+Generate exactly 6 This or That questions with emojis. Each: two choices separated by "or" with a relevant emoji per choice. Keep them punchy, fun, relatable.
+
+Also suggest ONE GIF description and ONE follow-up comment the host should post to deepen engagement.
+
+Respond ONLY in this exact JSON, no markdown, no extra text:
+{"title":"THIS OR THAT FRIDAY [1-2 emojis]","subtitle":"Pick one from each!","questions":["Choice A [emoji] or Choice B [emoji]","Choice A [emoji] or Choice B [emoji]","Choice A [emoji] or Choice B [emoji]","Choice A [emoji] or Choice B [emoji]","Choice A [emoji] or Choice B [emoji]","Choice A [emoji] or Choice B [emoji]"],"gif":"Exact GIF search description","followUp":"Host follow-up comment to boost replies"}`;
+
+  try{
+    const res=await fetch('https://api.anthropic.com/v1/messages',{method:'POST',headers:{'Content-Type':'application/json'},body:JSON.stringify({model:'claude-sonnet-4-5',max_tokens:1000,messages:[{role:'user',content:prompt}]})});
+    const data=await res.json();
+    const text=data.content&&data.content.find(b=>b.type==='text')?data.content.find(b=>b.type==='text').text:'';
+    const clean=text.replace(/```json[\s\S]*?```|```[\s\S]*?```/g,'').replace(/`/g,'').trim();
+    const jsonMatch=clean.match(/\{[\s\S]*\}/);
+    const parsed=JSON.parse(jsonMatch?jsonMatch[0]:clean);
+    renderToT(parsed);
+  }catch(e){
+    console.error('ToT generator error:',e);
+    out.innerHTML='<div class="ai-error">Something went wrong — please try again. ('+e.message+')</div>';
+  }finally{
+    btn.disabled=false;btn.textContent='Generate questions ✨';
+  }
+}
+
+function renderToT(d){
+  const numbered=d.questions.map((q,i)=>(i+1)+'️⃣ '+q).join('\n');
+  const fullPost=d.title+'\n\n'+d.subtitle+'\n\n'+numbered;
+  window._lastToT=fullPost;
+
+  const lis=d.questions.map((q,i)=>'<li>'+(i+1)+'&#65039;&#8419; '+q+'</li>').join('');
+
+  document.getElementById('tot-output').innerHTML=`
+    <div class="ai-card">
+      <div class="ai-title">${d.title}</div>
+      <div class="ai-sub">${d.subtitle}</div>
+      <ul class="ai-questions">${lis}</ul>
+      <div class="gif-pill"><span class="gif-label">GIF</span>${d.gif}</div>
+      ${d.followUp?`<div class="ai-followup"><strong>Host follow-up:</strong> ${d.followUp}</div>`:''}
+      <div class="ai-actions">
+        <button class="btn btn-copy" onclick="copyText(this,window._lastToT)">Copy post</button>
+        <button class="btn" onclick="generateToT()">Regenerate</button>
+      </div>
+    </div>
+  `;
+}
+
+/* ═══════════════════════════════════════════════
+   POLL GENERATOR
+   ═══════════════════════════════════════════════ */
+async function generatePoll(){
+  const niche=document.getElementById('poll-niche').value.trim()||'online community members';
+  const type=document.getElementById('poll-type').value;
+  const intent=document.getElementById('poll-intent').value;
+  const vibe=document.getElementById('poll-vibe').value;
+  const topic=document.getElementById('poll-topic').value.trim();
+  const btn=document.getElementById('poll-btn');
+  const out=document.getElementById('poll-output');
+
+  btn.disabled=true;btn.textContent='Generating...';
+  out.innerHTML='<div class="ai-loading"><div class="spinner"></div><br>Creating your poll...</div>';
+
+  const topicNote=topic?'Topic: '+topic+'.':'Choose a topic that resonates with this audience.';
+
+  const prompt=`You are creating a Skool poll post for a community of ${niche}. 
+Poll type: ${type}. Intent: ${intent}. Tone: ${vibe}. ${topicNote}
+
+Create a poll with:
+- A compelling question with 1-2 emojis
+- 3-4 answer options (each with an emoji), formatted so they can be used as Skool poll options
+- A short intro line (1-2 sentences) to put ABOVE the poll to set it up
+- A follow-up comment the host should post after people start answering
+- A GIF suggestion
+
+Respond ONLY in this exact JSON, no markdown:
+{"intro":"Short setup line before the poll","question":"The poll question with emoji","options":["Option A with emoji","Option B with emoji","Option C with emoji","Option D with emoji"],"followUp":"Host follow-up comment","gif":"GIF search description"}`;
+
+  try{
+    const res=await fetch('https://api.anthropic.com/v1/messages',{method:'POST',headers:{'Content-Type':'application/json'},body:JSON.stringify({model:'claude-sonnet-4-5',max_tokens:1000,messages:[{role:'user',content:prompt}]})});
+    const data=await res.json();
+    const text=data.content&&data.content.find(b=>b.type==='text')?data.content.find(b=>b.type==='text').text:'';
+    const clean=text.replace(/```json[\s\S]*?```|```[\s\S]*?```/g,'').replace(/`/g,'').trim();
+    const jsonMatch=clean.match(/\{[\s\S]*\}/);
+    const parsed=JSON.parse(jsonMatch?jsonMatch[0]:clean);
+    renderPoll(parsed);
+  }catch(e){
+    console.error('Poll generator error:',e);
+    out.innerHTML='<div class="ai-error">Something went wrong — please try again. ('+e.message+')</div>';
+  }finally{
+    btn.disabled=false;btn.textContent='Generate poll ✨';
+  }
+}
+
+function renderPoll(d){
+  const optionLines=d.options.map(o=>'→ '+o).join('\n');
+  const fullPost=d.intro+'\n\n'+d.question+'\n\n'+optionLines;
+  window._lastPoll=fullPost;
+  window._lastPollFollowUp=d.followUp;
+
+  const opts=d.options.map(o=>'<li>'+o+'</li>').join('');
+
+  document.getElementById('poll-output').innerHTML=`
+    <div class="ai-card">
+      <div class="ai-sub" style="margin-bottom:10px;font-style:italic">${d.intro}</div>
+      <div class="ai-title" style="font-size:16px;margin-bottom:14px">${d.question}</div>
+      <ul class="ai-questions">${opts}</ul>
+      <div class="gif-pill"><span class="gif-label">GIF</span>${d.gif}</div>
+      <div class="ai-followup"><strong>Host follow-up:</strong> ${d.followUp}</div>
+      <div class="ai-actions">
+        <button class="btn btn-copy" onclick="copyText(this,window._lastPoll)">Copy post</button>
+        <button class="btn" onclick="copyText(this,window._lastPollFollowUp)">Copy follow-up</button>
+        <button class="btn" onclick="generatePoll()">Regenerate</button>
+      </div>
+    </div>
+  `;
+}
+
+/* ═══════════════════════════════════════════════
+   WEEKLY RITUAL GENERATOR
+   ═══════════════════════════════════════════════ */
+async function generateRituals(){
+  const niche=document.getElementById('rit-niche').value.trim()||'online community members';
+  const vibe=document.getElementById('rit-vibe').value;
+  const focus=document.getElementById('rit-focus').value.trim();
+  const btn=document.getElementById('rit-btn');
+  const out=document.getElementById('rit-output');
+
+  btn.disabled=true;btn.textContent='Generating...';
+  out.innerHTML='<div class="ai-loading"><div class="spinner"></div><br>Planning your ritual week...</div>';
+
+  const focusNote=focus?'This week\'s focus: '+focus+'.':'No special focus — make it a balanced mix of connection, learning, and fun.';
+
+  const prompt=`You are creating a week of Skool engagement posts for a community of ${niche}. Vibe: ${vibe}. ${focusNote}
+
+Create 5 posts for Monday through Friday. Each post should have a specific ritual name and theme:
+- Monday: Check-in / intention setting
+- Tuesday: Teaching or tip
+- Wednesday: Win & brag / celebration
+- Thursday: Hot take or discussion
+- Friday: This or That / fun & playful
+
+Each post should be ready to copy and paste directly into Skool. Include emojis. Keep them short and punchy (3-8 lines max).
+
+Respond ONLY in this exact JSON, no markdown:
+{"posts":[{"day":"Monday","ritual":"Ritual name","type":"Check-in","text":"Full post text ready to paste"},{"day":"Tuesday","ritual":"Ritual name","type":"Teaching","text":"Full post text"},{"day":"Wednesday","ritual":"Ritual name","type":"Celebration","text":"Full post text"},{"day":"Thursday","ritual":"Ritual name","type":"Discussion","text":"Full post text"},{"day":"Friday","ritual":"Ritual name","type":"Fun","text":"Full post text"}]}`;
+
+  try{
+    const res=await fetch('https://api.anthropic.com/v1/messages',{method:'POST',headers:{'Content-Type':'application/json'},body:JSON.stringify({model:'claude-sonnet-4-5',max_tokens:2000,messages:[{role:'user',content:prompt}]})});
+    const data=await res.json();
+    const text=data.content&&data.content.find(b=>b.type==='text')?data.content.find(b=>b.type==='text').text:'';
+    const clean=text.replace(/```json[\s\S]*?```|```[\s\S]*?```/g,'').replace(/`/g,'').trim();
+    const jsonMatch=clean.match(/\{[\s\S]*\}/);
+    const parsed=JSON.parse(jsonMatch?jsonMatch[0]:clean);
+    renderRituals(parsed);
+  }catch(e){
+    console.error('Ritual generator error:',e);
+    out.innerHTML='<div class="ai-error">Something went wrong — please try again. ('+e.message+')</div>';
+  }finally{
+    btn.disabled=false;btn.textContent='Generate my ritual week ✨';
+  }
+}
+
+function renderRituals(d){
+  window._ritualPosts=d.posts;
+
+  const allText=d.posts.map(p=>'━━━ '+p.day.toUpperCase()+': '+p.ritual+' ━━━\n\n'+p.text).join('\n\n\n');
+  window._allRituals=allText;
+
+  const cards=d.posts.map((p,i)=>`
+    <div class="ritual-day">
+      <div class="ritual-day-header">
+        <span class="ritual-day-badge">${p.day}</span>
+        <span class="ritual-day-type">${p.ritual}</span>
+      </div>
+      <div class="ritual-post-text">${p.text}</div>
+      <button class="ritual-copy-btn" onclick="copyRitual(this,${i})">Copy this post</button>
+    </div>
+  `).join('');
+
+  document.getElementById('rit-output').innerHTML=`
+    <div style="margin-top:18px">
+      <div style="display:flex;justify-content:space-between;align-items:center;margin-bottom:14px;flex-wrap:wrap;gap:8px">
+        <div class="ai-title" style="font-size:16px">Your Ritual Week ✨</div>
+        <div style="display:flex;gap:8px">
+          <button class="btn btn-copy" onclick="copyText(this,window._allRituals)">Copy all posts</button>
+          <button class="btn" onclick="generateRituals()">Regenerate</button>
+        </div>
+      </div>
+      ${cards}
+    </div>
+  `;
+}
+
+function copyRitual(btn,idx){
+  const text=window._ritualPosts[idx].text;
+  try{
+    const ta=document.createElement('textarea');
+    ta.value=text;
+    ta.style.cssText='position:fixed;top:0;left:0;opacity:0;pointer-events:none';
+    document.body.appendChild(ta);
+    ta.focus();ta.select();
+    document.execCommand('copy');
+    document.body.removeChild(ta);
+    btn.textContent='Copied!';btn.classList.add('copied');
+    setTimeout(()=>{btn.textContent='Copy this post';btn.classList.remove('copied')},2000);
+  }catch(e){}
+}
+
+renderIntentPills();
+renderCatTabs();
+renderPosts();
+</script>
+</body>
+</html>
