@@ -1,0 +1,941 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Skool Engagement Post Generator – Skool Community Marketplace</title>
+<link href="https://fonts.googleapis.com/css2?family=Nunito:ital,wght@0,400;0,500;0,600;0,700;0,800;0,900;1,400&family=Syne:wght@600;700;800&family=DM+Mono:wght@400;500&display=swap" rel="stylesheet">
+<style>
+*,*::before,*::after{box-sizing:border-box;margin:0;padding:0}
+:root{
+  --green:#4a7c3f;--green-bright:#6db560;--green-glow:#8ed97f;--green-light:#d4f0cc;--green-pale:#eaf7e6;
+  --red:#c03a2b;--red-warm:#e05a3a;--blue:#1a5eb8;--blue-bright:#2e80e0;--blue-light:#d0e8ff;
+  --gold:#c8a84b;--gold-light:#fdf3d0;--white:#fdfffe;
+  --surface:rgba(255,255,255,0.82);--text:#1a2e18;--text-mid:#3a5a35;--text-soft:#6a8f64;
+  --border:rgba(74,124,63,0.18);--radius:16px;--radius-sm:10px;--radius-pill:50px;
+}
+body{font-family:'Nunito',sans-serif;background:var(--green-pale);min-height:100vh;color:var(--text);overflow-x:hidden;}
+body::before{content:'';position:fixed;inset:0;pointer-events:none;z-index:0;
+  background:radial-gradient(ellipse at 10% 0%,rgba(141,217,127,0.35) 0%,transparent 50%),
+    radial-gradient(ellipse at 90% 5%,rgba(46,128,224,0.18) 0%,transparent 40%),
+    radial-gradient(ellipse at 50% 100%,rgba(192,58,43,0.1) 0%,transparent 50%),
+    radial-gradient(ellipse at 75% 50%,rgba(200,168,75,0.1) 0%,transparent 40%);}
+
+/* ── TOP BANNER ── */
+.marketplace-banner{position:relative;z-index:10;background:linear-gradient(135deg,#1a3a15 0%,#2d5e25 40%,#1a4a35 70%,#0e2d4a 100%);overflow:hidden;border-bottom:3px solid var(--green-glow);box-shadow:0 4px 30px rgba(0,0,0,0.35),0 0 60px rgba(109,181,96,0.2);}
+.marketplace-banner::before{content:'';position:absolute;inset:0;pointer-events:none;background:radial-gradient(ellipse at 20% 50%,rgba(109,181,96,0.25) 0%,transparent 50%),radial-gradient(ellipse at 80% 50%,rgba(46,128,224,0.2) 0%,transparent 50%);}
+.banner-inner{position:relative;z-index:1;max-width:900px;margin:0 auto;display:flex;align-items:center;justify-content:space-between;padding:16px 28px;gap:16px;flex-wrap:wrap;}
+.banner-left{display:flex;align-items:center;gap:14px}
+.skool-wordmark{display:flex;align-items:center;gap:3px}
+.skool-s{font-family:'Syne',sans-serif;font-weight:800;font-size:28px;color:#e03a2b;line-height:1}
+.skool-k{font-family:'Syne',sans-serif;font-weight:800;font-size:28px;color:#1a5eb8;line-height:1}
+.skool-o{font-family:'Syne',sans-serif;font-weight:800;font-size:28px;color:#c8a84b;line-height:1}
+.skool-o2{font-family:'Syne',sans-serif;font-weight:800;font-size:28px;color:#4a7c3f;line-height:1}
+.skool-l{font-family:'Syne',sans-serif;font-weight:800;font-size:28px;color:#1a5eb8;line-height:1}
+.banner-divider{width:1px;height:36px;background:rgba(255,255,255,0.2)}
+.banner-taglines{display:flex;flex-direction:column;gap:2px}
+.banner-sub{font-family:'DM Mono',monospace;font-size:10px;letter-spacing:2px;text-transform:uppercase;color:rgba(255,255,255,0.5)}
+.banner-title{font-family:'Syne',sans-serif;font-weight:700;font-size:16px;color:#fff;line-height:1.2}
+.banner-right{display:flex;align-items:center;gap:10px}
+.banner-badge{padding:6px 16px;border-radius:var(--radius-pill);font-size:11px;font-weight:800;font-family:'Nunito',sans-serif;letter-spacing:0.5px;text-transform:uppercase;background:linear-gradient(135deg,var(--green-bright),var(--green-glow));color:#1a2e18;box-shadow:0 0 16px rgba(109,181,96,0.5);text-decoration:none;}
+.banner-by{font-size:12px;color:rgba(255,255,255,0.55);font-weight:500}
+.banner-by strong{color:rgba(255,255,255,0.9)}
+.orb{position:absolute;border-radius:50%;pointer-events:none}
+.orb-1{width:120px;height:120px;right:-20px;top:-30px;background:radial-gradient(circle,rgba(46,128,224,0.3) 0%,transparent 70%)}
+.orb-2{width:80px;height:80px;left:10%;top:50%;transform:translateY(-50%);background:radial-gradient(circle,rgba(109,181,96,0.2) 0%,transparent 70%)}
+
+/* ── NICHE SELECTOR ── */
+.niche-bar{position:relative;z-index:5;background:rgba(255,255,255,0.6);backdrop-filter:blur(12px);border-bottom:1px solid var(--border);padding:14px 20px;}
+.niche-bar-inner{max-width:900px;margin:0 auto;display:flex;align-items:center;gap:14px;flex-wrap:wrap;}
+.niche-label{font-family:'DM Mono',monospace;font-size:10px;letter-spacing:1.5px;text-transform:uppercase;color:var(--text-soft);white-space:nowrap;font-weight:500;}
+.niche-pills{display:flex;gap:6px;flex-wrap:wrap;}
+.niche-pill{padding:6px 14px;border-radius:var(--radius-pill);border:1px solid var(--border);font-size:11px;font-weight:700;cursor:pointer;background:rgba(255,255,255,0.6);color:var(--text-mid);transition:all .15s;font-family:'Nunito',sans-serif;}
+.niche-pill:hover:not(.active){background:rgba(255,255,255,0.9);color:var(--text)}
+.niche-pill.active{background:linear-gradient(135deg,var(--green),var(--green-bright));color:#fff;border-color:transparent;box-shadow:0 2px 12px rgba(74,124,63,0.3);}
+
+/* ── WRAPPER ── */
+.wrapper{position:relative;z-index:1;max-width:800px;margin:0 auto;padding:28px 20px 60px}
+
+/* ── HEADER ── */
+.header{text-align:center;margin:24px 0 24px}
+.header .eyebrow{font-family:'DM Mono',monospace;font-size:10px;font-weight:500;letter-spacing:2px;text-transform:uppercase;color:var(--text-soft);margin-bottom:10px;display:block;}
+.header h1{font-family:'Syne',sans-serif;font-weight:800;font-size:clamp(22px,4vw,30px);line-height:1.2;margin-bottom:6px;background:linear-gradient(135deg,var(--green),var(--blue-bright));-webkit-background-clip:text;-webkit-text-fill-color:transparent;background-clip:text;}
+.header p{font-size:14px;color:var(--text-mid);font-weight:500;max-width:480px;margin:0 auto}
+.niche-display{display:inline-flex;align-items:center;gap:6px;margin-top:10px;padding:5px 14px;border-radius:var(--radius-pill);background:linear-gradient(135deg,rgba(109,181,96,0.15),rgba(46,128,224,0.1));border:1px solid rgba(74,124,63,0.2);font-size:12px;font-weight:700;color:var(--green);}
+
+/* ── SECTION TABS ── */
+.section-tabs{display:flex;gap:0;margin-bottom:24px;background:rgba(255,255,255,0.55);backdrop-filter:blur(10px);border:1px solid var(--border);border-radius:var(--radius-pill);padding:4px;width:fit-content;margin-left:auto;margin-right:auto;flex-wrap:wrap;justify-content:center;box-shadow:0 2px 16px rgba(74,124,63,0.1);}
+.section-tab{padding:9px 18px;border-radius:var(--radius-pill);border:none;font-size:12px;font-weight:700;cursor:pointer;background:transparent;color:var(--text-soft);transition:all .2s;font-family:'Nunito',sans-serif;}
+.section-tab.active{background:linear-gradient(135deg,var(--green),var(--green-bright));color:#fff;box-shadow:0 2px 12px rgba(74,124,63,0.35);}
+.section-tab:hover:not(.active){color:var(--text);background:rgba(255,255,255,0.7)}
+
+/* ── PANELS ── */
+.panel{display:none}
+.panel.visible{display:block;animation:fadeIn .3s ease}
+@keyframes fadeIn{from{opacity:0;transform:translateY(6px)}to{opacity:1;transform:none}}
+
+/* ── INTENT + CAT FILTERS ── */
+.filter-row{margin-bottom:14px}
+.filter-label{font-family:'DM Mono',monospace;font-size:10px;letter-spacing:1.5px;text-transform:uppercase;color:var(--text-soft);margin-bottom:8px;font-weight:500}
+.pill-group{display:flex;gap:6px;flex-wrap:wrap}
+.pill{padding:6px 14px;border-radius:var(--radius-pill);border:1px solid var(--border);font-size:11px;font-weight:600;cursor:pointer;background:rgba(255,255,255,0.55);color:var(--text-mid);transition:all .15s;font-family:'Nunito',sans-serif;}
+.pill.active{background:var(--green-light);border-color:var(--green-bright);color:var(--green);}
+.pill:hover:not(.active){background:rgba(255,255,255,0.85);color:var(--text)}
+.cat-pill.active{background:var(--green-bright);border-color:var(--green-bright);color:#fff;box-shadow:0 0 10px rgba(109,181,96,0.25)}
+
+/* ── SURPRISE + NAV ── */
+.surprise-bar{display:flex;align-items:center;gap:12px;padding:12px 18px;background:rgba(255,255,255,0.5);border:1px solid var(--border);border-radius:var(--radius-sm);margin-bottom:16px;backdrop-filter:blur(6px);}
+.surprise-bar p{font-size:13px;color:var(--text-mid);flex:1;font-weight:500}
+.nav{display:flex;align-items:center;gap:10px;margin-bottom:12px}
+.nav-count{font-family:'DM Mono',monospace;font-size:11px;color:var(--text-soft);flex:1;text-align:center;letter-spacing:0.5px;}
+
+/* ── BUTTONS ── */
+.btn{padding:8px 18px;border-radius:var(--radius-pill);font-size:12px;font-weight:700;cursor:pointer;border:1px solid var(--border);background:rgba(255,255,255,0.65);color:var(--text-mid);transition:all .15s;font-family:'Nunito',sans-serif;backdrop-filter:blur(4px);}
+.btn:hover{background:rgba(255,255,255,0.9);color:var(--text)}
+.btn-glow{background:linear-gradient(135deg,var(--green),var(--green-bright));border:none;color:#fff;box-shadow:0 2px 14px rgba(74,124,63,0.3);}
+.btn-glow:hover{box-shadow:0 4px 20px rgba(74,124,63,0.4);transform:translateY(-1px)}
+.btn-copy.copied{background:var(--green-light);color:var(--green);border-color:var(--green-bright)}
+
+/* ── CARDS ── */
+.card{background:rgba(255,255,255,0.78);border:1px solid var(--border);border-radius:var(--radius);padding:24px;backdrop-filter:blur(10px);box-shadow:0 4px 24px rgba(74,124,63,0.1);}
+.card-top{display:flex;justify-content:space-between;align-items:center;margin-bottom:14px;flex-wrap:wrap;gap:8px}
+.badge{font-family:'DM Mono',monospace;font-size:10px;font-weight:500;padding:4px 12px;border-radius:var(--radius-pill);background:linear-gradient(135deg,rgba(109,181,96,0.2),rgba(46,128,224,0.15));color:var(--green);letter-spacing:0.5px;text-transform:uppercase;}
+.badge-intent{font-family:'DM Mono',monospace;font-size:10px;font-weight:500;padding:4px 12px;border-radius:var(--radius-pill);background:rgba(192,58,43,0.1);color:var(--red);letter-spacing:0.5px;}
+.cat-label{font-size:11px;color:var(--text-soft);font-weight:600}
+.post-text{font-size:15px;line-height:1.8;color:var(--text);margin-bottom:14px;white-space:pre-wrap;font-weight:400;}
+.gif-pill{display:inline-flex;align-items:center;gap:7px;font-size:11px;color:var(--text-mid);padding:5px 14px;background:rgba(200,168,75,0.12);border:1px solid rgba(200,168,75,0.25);border-radius:var(--radius-pill);margin-bottom:4px;font-weight:500;}
+.gif-label{font-family:'DM Mono',monospace;font-size:9px;font-weight:500;color:var(--gold);letter-spacing:1px;text-transform:uppercase;}
+.best-for{font-size:11px;color:var(--text-soft);font-weight:500;margin-bottom:14px;font-style:italic;}
+.skool-hints{margin-top:14px;padding:14px;background:rgba(212,240,204,0.4);border-radius:var(--radius-sm);border:1px solid rgba(109,181,96,0.15);}
+.skool-hints-title{font-family:'DM Mono',monospace;font-size:10px;font-weight:500;letter-spacing:1.5px;text-transform:uppercase;color:var(--green);margin-bottom:8px;}
+.skool-hint{font-size:12px;color:var(--text-mid);line-height:1.6}
+.actions{display:flex;gap:8px;flex-wrap:wrap;padding-top:14px;border-top:1px solid var(--border)}
+
+/* ── TOT / POLL / RITUAL CARDS ── */
+.output-card{background:rgba(255,255,255,0.78);border:1px solid var(--border);border-radius:var(--radius);padding:24px;backdrop-filter:blur(10px);box-shadow:0 4px 24px rgba(74,124,63,0.1);margin-top:18px;}
+.out-title{font-family:'Syne',sans-serif;font-weight:700;font-size:18px;color:var(--text);margin-bottom:4px;}
+.out-sub{font-size:13px;color:var(--text-mid);margin-bottom:14px}
+.q-list{list-style:none;display:flex;flex-direction:column;gap:6px;margin-bottom:14px}
+.q-list li{font-size:14px;color:var(--text);line-height:1.6;padding:9px 14px;background:linear-gradient(135deg,rgba(212,240,204,0.45),rgba(208,232,255,0.2));border-radius:var(--radius-sm);border:1px solid rgba(109,181,96,0.12);}
+.followup-box{padding:12px 14px;background:rgba(253,243,208,0.4);border-radius:var(--radius-sm);border:1px solid rgba(200,168,75,0.2);font-size:12px;color:var(--text-mid);line-height:1.6;margin-bottom:14px;}
+.followup-box strong{color:var(--red-warm);font-weight:700}
+.out-actions{display:flex;gap:8px;flex-wrap:wrap;padding-top:14px;border-top:1px solid var(--border)}
+
+/* ── RITUAL DAYS ── */
+.ritual-day{background:rgba(255,255,255,0.68);border:1px solid var(--border);border-radius:var(--radius);padding:18px;margin-bottom:10px;backdrop-filter:blur(6px);}
+.ritual-day-header{display:flex;align-items:center;gap:10px;margin-bottom:10px}
+.ritual-day-badge{font-family:'DM Mono',monospace;font-size:10px;font-weight:500;padding:4px 12px;border-radius:var(--radius-pill);background:linear-gradient(135deg,var(--green),var(--blue-bright));color:#fff;letter-spacing:0.5px;}
+.ritual-day-type{font-size:11px;color:var(--text-soft);font-weight:600;text-transform:uppercase;letter-spacing:0.5px}
+.ritual-post-text{font-size:14px;line-height:1.7;color:var(--text);white-space:pre-wrap;margin-bottom:10px}
+.ritual-copy-btn{padding:6px 14px;border-radius:var(--radius-pill);font-size:11px;font-weight:700;cursor:pointer;border:1px solid var(--border);background:rgba(255,255,255,0.65);color:var(--text-mid);font-family:'Nunito',sans-serif;transition:all .15s;}
+.ritual-copy-btn:hover{background:rgba(255,255,255,0.9)}
+.ritual-copy-btn.copied{background:var(--green-light);color:var(--green)}
+
+/* ── TOT GRID ── */
+.tot-grid{display:grid;grid-template-columns:1fr 1fr;gap:8px;margin-bottom:14px}
+@media(max-width:500px){.tot-grid{grid-template-columns:1fr}}
+.tot-card-item{padding:10px 14px;border-radius:var(--radius-sm);background:linear-gradient(135deg,rgba(212,240,204,0.5),rgba(208,232,255,0.25));border:1px solid rgba(74,124,63,0.12);font-size:13px;color:var(--text);font-weight:500;}
+.tot-num{font-family:'DM Mono',monospace;font-size:10px;color:var(--green);margin-bottom:3px;font-weight:500;}
+
+/* ── BOTTOM BANNER ── */
+.brand-footer{position:relative;background:linear-gradient(135deg,#0e2d4a 0%,#1a3a15 50%,#2d1a10 100%);border-top:3px solid var(--green-bright);overflow:hidden;box-shadow:0 -4px 30px rgba(0,0,0,0.2);}
+.brand-footer::before{content:'';position:absolute;inset:0;pointer-events:none;background:radial-gradient(ellipse at 30% 50%,rgba(109,181,96,0.2) 0%,transparent 60%),radial-gradient(ellipse at 70% 50%,rgba(192,58,43,0.15) 0%,transparent 60%);}
+.brand-footer-inner{position:relative;z-index:1;max-width:900px;margin:0 auto;padding:20px 28px;display:flex;align-items:center;justify-content:space-between;flex-wrap:wrap;gap:12px;}
+.brand-footer-title{font-family:'Syne',sans-serif;font-weight:800;font-size:14px;color:#fff}
+.brand-footer-sub{font-size:11px;color:rgba(255,255,255,0.5);font-family:'DM Mono',monospace;letter-spacing:1px;text-transform:uppercase}
+.brand-footer-pills{display:flex;gap:6px;flex-wrap:wrap;margin-top:6px}
+.brand-pill{padding:4px 12px;border-radius:var(--radius-pill);font-size:10px;font-weight:700;font-family:'Nunito',sans-serif;letter-spacing:0.5px;text-transform:uppercase;}
+.brand-pill-red{background:rgba(192,58,43,0.25);color:#e07a70;border:1px solid rgba(192,58,43,0.3)}
+.brand-pill-blue{background:rgba(46,128,224,0.2);color:#7ab4f0;border:1px solid rgba(46,128,224,0.25)}
+.brand-pill-green{background:rgba(109,181,96,0.2);color:var(--green-glow);border:1px solid rgba(109,181,96,0.25)}
+.brand-pill-gold{background:rgba(200,168,75,0.2);color:#e0c06a;border:1px solid rgba(200,168,75,0.25)}
+.brand-footer-cta{display:inline-block;padding:9px 22px;border-radius:var(--radius-pill);background:linear-gradient(135deg,var(--green-bright),var(--green-glow));color:#1a2e18;font-weight:800;font-size:12px;font-family:'Nunito',sans-serif;text-decoration:none;box-shadow:0 0 20px rgba(109,181,96,0.4);transition:all .2s;}
+.brand-footer-cta:hover{box-shadow:0 0 30px rgba(109,181,96,0.55);transform:translateY(-1px)}
+.brand-footer-by{font-size:11px;color:rgba(255,255,255,0.4);margin-top:5px;font-family:'DM Mono',monospace}
+.brand-footer-by strong{color:rgba(255,255,255,0.75)}
+
+.empty{text-align:center;padding:40px 16px;color:var(--text-soft);font-size:14px}
+
+@media(max-width:600px){
+  .wrapper{padding:16px 12px 40px}
+  .section-tabs{flex-wrap:wrap;width:100%}
+  .section-tab{flex:1;min-width:0;padding:9px 10px;font-size:11px;text-align:center}
+  .card,.output-card{padding:18px}
+  .banner-inner{padding:12px 16px}
+  .banner-right{display:none}
+  .brand-footer-inner{flex-direction:column;align-items:flex-start}
+}
+</style>
+</head>
+<body>
+
+<!-- TOP BANNER -->
+<div class="marketplace-banner">
+  <div class="orb orb-1"></div>
+  <div class="orb orb-2"></div>
+  <div class="banner-inner">
+    <div class="banner-left">
+      <div class="skool-wordmark">
+        <span class="skool-s">s</span><span class="skool-k">k</span><span class="skool-o">o</span><span class="skool-o2">o</span><span class="skool-l">l</span>
+      </div>
+      <div class="banner-divider"></div>
+      <div class="banner-taglines">
+        <span class="banner-sub">Start Growing Faster</span>
+        <span class="banner-title">Community Marketplace</span>
+      </div>
+    </div>
+    <div class="banner-right">
+      <span class="banner-by">by <strong>Liezl &amp; Christine</strong></span>
+      <a class="banner-badge" href="https://www.skool.com/skool-community-marketplace-9239/about?ref=0dd3d3a5cf9a4358a79732684be41441" target="_blank">List Your Community</a>
+    </div>
+  </div>
+</div>
+
+<!-- NICHE SELECTOR BAR -->
+<div class="niche-bar">
+  <div class="niche-bar-inner">
+    <span class="niche-label">Your niche:</span>
+    <div class="niche-pills" id="niche-pills"></div>
+  </div>
+</div>
+
+<div class="wrapper">
+  <div class="header">
+    <span class="eyebrow">engagement + community growth</span>
+    <h1>Skool Post Generator ✦</h1>
+    <p>Ready-to-post content that sparks real conversations — tailored to your niche</p>
+    <div class="niche-display" id="niche-display">✦ Spiritual Entrepreneurs</div>
+  </div>
+
+  <div class="section-tabs">
+    <button class="section-tab active" onclick="switchPanel('posts')">Engagement Posts</button>
+    <button class="section-tab" onclick="switchPanel('tot')">This or That ✨</button>
+    <button class="section-tab" onclick="switchPanel('polls')">Polls</button>
+    <button class="section-tab" onclick="switchPanel('rituals')">Weekly Rituals</button>
+  </div>
+
+  <!-- PANEL 1: ENGAGEMENT POSTS -->
+  <div class="panel visible" id="panel-posts">
+    <div class="filter-row">
+      <div class="filter-label">Goal / Intent</div>
+      <div class="pill-group" id="intent-pills"></div>
+    </div>
+    <div class="filter-row">
+      <div class="filter-label">Category</div>
+      <div class="pill-group" id="cat-pills"></div>
+    </div>
+    <div class="surprise-bar">
+      <p>Want something random? ✨</p>
+      <button class="btn btn-glow" onclick="showRandom()">Surprise me</button>
+    </div>
+    <div id="nav-area" style="display:none" class="nav">
+      <button class="btn" onclick="prevPost()">← Prev</button>
+      <span class="nav-count" id="nav-count"></span>
+      <button class="btn" onclick="nextPost()">Next →</button>
+    </div>
+    <div id="posts-container"></div>
+  </div>
+
+  <!-- PANEL 2: THIS OR THAT -->
+  <div class="panel" id="panel-tot">
+    <div id="tot-container"></div>
+  </div>
+
+  <!-- PANEL 3: POLLS -->
+  <div class="panel" id="panel-polls">
+    <div id="polls-container"></div>
+  </div>
+
+  <!-- PANEL 4: WEEKLY RITUALS -->
+  <div class="panel" id="panel-rituals">
+    <div id="rituals-container"></div>
+  </div>
+</div>
+
+<!-- BOTTOM BANNER -->
+<div class="brand-footer">
+  <div class="brand-footer-inner">
+    <div>
+      <div class="brand-footer-title">🏪 Skool Community Marketplace</div>
+      <div class="brand-footer-sub">The hub for Skool owners to grow faster</div>
+      <div class="brand-footer-pills">
+        <span class="brand-pill brand-pill-green">Promote Your Community</span>
+        <span class="brand-pill brand-pill-blue">Find Your People</span>
+        <span class="brand-pill brand-pill-red">Grow Your Members</span>
+        <span class="brand-pill brand-pill-gold">by Liezl &amp; Christine</span>
+      </div>
+    </div>
+    <div style="text-align:right">
+      <a class="brand-footer-cta" href="https://www.skool.com/skool-community-marketplace-9239/about?ref=0dd3d3a5cf9a4358a79732684be41441" target="_blank">List Your Community Today →</a>
+      <div class="brand-footer-by">Built with ✦ for <strong>Skool owners everywhere</strong></div>
+    </div>
+  </div>
+</div>
+
+<script>
+/* ════════════════════════════════════════════════════
+   NICHE DATA
+   ════════════════════════════════════════════════════ */
+const niches = [
+  { id:'spiritual', label:'🔮 Spiritual / Woo', short:'Spiritual Entrepreneurs' },
+  { id:'coaching',  label:'🎯 Life Coaching',   short:'Life Coaches' },
+  { id:'marketing', label:'📣 Marketing & Biz', short:'Marketing & Business' },
+  { id:'fitness',   label:'💪 Fitness & Health', short:'Fitness Coaches' },
+  { id:'finance',   label:'💰 Finance & Wealth', short:'Finance Creators' },
+  { id:'creative',  label:'🎨 Creative & Content', short:'Creatives & Content' },
+  { id:'mindset',   label:'🧠 Mindset & Personal Dev', short:'Mindset Coaches' },
+  { id:'parenting', label:'👶 Parenting & Family', short:'Parenting Coaches' },
+  { id:'tech',      label:'💻 Tech & AI Skills', short:'Tech Educators' },
+  { id:'realestate',label:'🏠 Real Estate',      short:'Real Estate Investors' },
+];
+
+let activeNiche = 'spiritual';
+
+/* ════════════════════════════════════════════════════
+   POST LIBRARY — all niches, all categories
+   ════════════════════════════════════════════════════ */
+const library = {
+
+spiritual: [
+  {cat:"Community Vibes",intent:"Warm up",type:"Vibe Check",best:"Any day",text:"Current business vibe check — which era are you in? 😅\n\n🌱 planting seeds\n🔥 on fire\n😴 rest era\n🤯 figuring it out",gif:"Someone checking vibes with sunglasses",followUp:"Whatever era you're in — it's valid. What would make this week feel aligned?"},
+  {cat:"Community Vibes",intent:"Warm up",type:"Unpopular Opinion",best:"New & cold members",text:"Unpopular opinion in the spiritual business space? Go. 👇\n(no softening it 😂)",gif:"Judge Judy leaning forward",followUp:"Love this — now tell us WHY you believe it so deeply."},
+  {cat:"Community Vibes",intent:"Warm up",type:"Two Truths One Lie",best:"Getting-to-know-you phase",text:"Two truths and a lie about your spiritual business.\nGo. We'll guess 👇😂",gif:"Wheel of Fortune spinning",followUp:"Time to reveal — which one was the lie?!"},
+  {cat:"Community Vibes",intent:"Warm up",type:"CEO Day Emojis",best:"New members",text:"Describe your CEO day today in 3 emojis.\nI'll go first: ☕🔮💻\n\nYour turn 👇",gif:"Fast-forward montage of someone's day",followUp:"Love seeing how different everyone's flow is. Anyone else surprised by the patterns?"},
+  {cat:"Wins & Brags",intent:"Credibility",type:"Humble Brag Pass",best:"Warm community",text:"Humble brag pass — go. 🏆\nOne win. Recent. Real. Drop it.",gif:"Legally Blonde what like its hard",followUp:"THIS is what I love about this community. Y'all are actually doing the work."},
+  {cat:"Wins & Brags",intent:"Credibility",type:"Client Message",best:"Coaches & healers",text:"What's a message from a client you screenshot and saved forever? 💌\nYou don't have to share it word for word — just tell us what it said.",gif:"Someone crying happy tears",followUp:"These messages are proof your work changes lives. Never forget that."},
+  {cat:"Hot Takes",intent:"Boost comments",type:"Hot Take",best:"Mid-week energy boost",text:"Hot take: most spiritual entrepreneurs are undercharging not because of their prices but because of their CONTENT. 🔥\n\nAgree, disagree, or add yours below 👇",gif:"Throwing a grenade and walking away",followUp:"Okay the replies are SPICY. Who's got the hottest take so far?"},
+  {cat:"Hot Takes",intent:"Boost comments",type:"Myth Buster",best:"Authority building",text:"Name one piece of 'common business advice' that's actually terrible for spiritual entrepreneurs. 🙅‍♀️\n\nI'll go first...",gif:"Explosion demolishing a building",followUp:"The fact that we all agreed on like 3 of these says EVERYTHING."},
+  {cat:"Hot Takes",intent:"Boost comments",type:"The Ick List",best:"Any stage",text:"What's your biggest marketing ick in the spiritual space? 😬\nDrop yours — let's build the do-not-do list.",gif:"Full body shudder cringe reaction",followUp:"Okay we officially have a community ick list. Printing this out immediately."},
+  {cat:"Fill in the Blank",intent:"Boost comments",type:"Finish The Sentence",best:"Any day",text:"Finish this sentence:\n\"My clients always come to me because ___\" ✨\n\nDrop it below. No overthinking.",gif:"Someone furiously typing",followUp:"Read your answer back to yourself. That's your next piece of content. You're welcome. 😉"},
+  {cat:"Fill in the Blank",intent:"Warm up",type:"The Real Reason",best:"Pre-launch warmup",text:"The REAL reason I started my spiritual business was ___.\n(Not the polished version. The real one.)\n\nGo 👇",gif:"Truth bomb explosion",followUp:"These answers are why this community is different. Raw and real."},
+  {cat:"Your Magic",intent:"Share your magic",type:"60-Second Teaching",best:"Authority building",text:"Teach us something in 60 seconds or less 🎉\nWhat's one thing your audience pays you to know?",gif:"Someone nodding furiously",followUp:"Okay this thread just became a free masterclass. Who's bookmarking this?"},
+  {cat:"Your Magic",intent:"Share your magic",type:"Founder Story",best:"New member welcome",text:"Who do you help and what transformation do you create? 🙋\nWrite it like you'd say it to a stranger at a coffee shop.",gif:"Coffee shop conversation",followUp:"Love these intros. If you see someone whose work resonates — tell them. That's how collabs start."},
+  {cat:"Drive to Classroom",intent:"Drive to classroom",type:"Implementation Thread",best:"Post-lesson day",text:"Okay — who watched [LESSON NAME] this week? 🎓\n\nDrop ONE thing you're going to implement.\nBonus: tell us WHEN you'll do it. Accountability = magic.",gif:"Person taking notes intensely",followUp:"Coming back to check on y'all in 48 hours. You've been warned. 😂"},
+  {cat:"Launch Support",intent:"Launch support",type:"Offer Tease",best:"Pre-launch week",text:"Something new is coming and I literally cannot stop thinking about it. 👀\n\nHint: it's going to help you ___.\n\nDrop a 🔮 if you want to be first to know.",gif:"Curtain about to open",followUp:"The 🔮s are rolling in. DM me 'READY' and I'll make sure you hear about it first."},
+],
+
+coaching: [
+  {cat:"Community Vibes",intent:"Warm up",type:"Vibe Check",best:"Any day",text:"Real talk — where are you at with your goals right now? 🎯\n\n🔥 crushing it\n📋 planning mode\n😤 stuck and frustrated\n🌱 just getting started",gif:"Coach pointing at whiteboard",followUp:"No matter where you are — what's ONE thing that would make this week a win?"},
+  {cat:"Community Vibes",intent:"Warm up",type:"Unpopular Opinion",best:"Established community",text:"Unpopular life coaching opinion? Drop it. 👇\nI promise I won't unfollow you. 😂",gif:"Judge Judy leaning forward",followUp:"Some of these are BRAVE. Which one resonates most with you?"},
+  {cat:"Community Vibes",intent:"Warm up",type:"Two Truths One Lie",best:"Getting-to-know-you phase",text:"Two truths and a lie about your coaching journey.\nGo. We'll guess 👇",gif:"Wheel of Fortune spinning",followUp:"Okay reveal time! Which one was the lie?"},
+  {cat:"Community Vibes",intent:"Warm up",type:"CEO Day Emojis",best:"Any day",text:"Describe your workday today in 3 emojis.\nI'll go first: ☕📞✅\n\nYour turn 👇",gif:"Someone frantically scheduling calendar",followUp:"We are all living such different days and I love it. What's the one non-negotiable in your routine?"},
+  {cat:"Wins & Brags",intent:"Credibility",type:"Client Breakthrough",best:"Warm community",text:"What's the biggest breakthrough a client had working with you?\nSummarise it in 2-3 sentences. No filters. 🏆",gif:"Light bulb moment gif",followUp:"Reading these is why I do what I do. Which one hit different for you?"},
+  {cat:"Wins & Brags",intent:"Credibility",type:"Before After",best:"Pre-launch",text:"Before working with me, my clients usually feel ___.\nAfter a few sessions they start to ___.\n\nDrop your before/after below 👇",gif:"Butterfly transformation",followUp:"These transformations are everything. What made the biggest shift for your clients?"},
+  {cat:"Hot Takes",intent:"Boost comments",type:"Hot Take",best:"Mid-week",text:"Hot take: most people don't need more information — they need someone to hold them accountable. 🔥\n\nAgree or disagree? Go. 👇",gif:"Mic drop",followUp:"The debate in the comments is sending me. What's YOUR take on this?"},
+  {cat:"Hot Takes",intent:"Boost comments",type:"Myth Buster",best:"Authority building",text:"What's the most overrated advice in the personal development space right now? 🙅\n\nI'll go first...",gif:"Explosion demolishing a building",followUp:"We just dismantled like 6 industries in one thread. You're welcome. 😂"},
+  {cat:"Fill in the Blank",intent:"Boost comments",type:"Finish The Sentence",best:"Any day",text:"Finish this sentence:\n\"My ideal client always says ___ before we start working together.\" 🎯\n\nDrop it below!",gif:"Someone furiously typing",followUp:"These are gold. Every single one is a content idea waiting to happen."},
+  {cat:"Fill in the Blank",intent:"Boost comments",type:"The Real Reason",best:"Any day",text:"The REAL reason I became a life coach was ___.\n(Not the polished version. The messy real one.)\n\nGo 👇",gif:"Truth bomb explosion",followUp:"Thank you for being honest. This is the stuff that makes people trust you."},
+  {cat:"Your Magic",intent:"Share your magic",type:"One Framework",best:"Authority building",text:"What's ONE framework or approach in your coaching that gets results faster than anything else?\nShare it in 3 bullet points. 📋",gif:"Someone nodding furiously",followUp:"This thread is basically a masterclass. Who's taking notes?"},
+  {cat:"Your Magic",intent:"Share your magic",type:"Founder Story",best:"New members",text:"In one paragraph — who do you coach, and what changes for them?\nWrite it like you'd say it over coffee. ☕",gif:"Coffee shop conversation",followUp:"These intros are so good. Tag someone here who needs coaching right now."},
+  {cat:"Drive to Classroom",intent:"Drive to classroom",type:"Implementation Thread",best:"Post-lesson",text:"Who went through [MODULE NAME] this week? 🎓\n\nDrop your biggest takeaway below.\nLet's keep each other accountable.",gif:"Person taking notes intensely",followUp:"Seeing these takeaways is everything. Who's still catching up — no shame, go get it!"},
+  {cat:"Launch Support",intent:"Launch support",type:"Offer Tease",best:"Pre-launch",text:"I'm building something that I genuinely think will change how you approach [TOPIC]. 👀\n\nDrop a 🎯 if you want early access.",gif:"Curtain about to open",followUp:"The 🎯s are rolling in. DM me 'READY' and you'll hear first."},
+  {cat:"Launch Support",intent:"Launch support",type:"Objection Buster",best:"Cart open",text:"What's the ONE thing that makes you hesitate before investing in coaching?\n\nHonest answers only. I'll address every single one. 🤔",gif:"Person thinking deeply",followUp:"Thank you for being real with me. Let me tackle these one by one."},
+],
+
+marketing: [
+  {cat:"Community Vibes",intent:"Warm up",type:"Vibe Check",best:"Any day",text:"Marketing vibe check — where are you at right now? 📣\n\n🚀 scaling fast\n🧪 testing and iterating\n😤 stuck on something\n💡 full of ideas, no execution",gif:"Someone checking vibes with sunglasses",followUp:"Be honest — what's the ONE thing actually blocking your growth right now?"},
+  {cat:"Community Vibes",intent:"Warm up",type:"Unpopular Opinion",best:"Established community",text:"Unpopular marketing opinion? Bring it. 🔥\n(The spicier the better 😂)",gif:"Judge Judy leaning forward",followUp:"Some of these are going to get me in trouble. Which one do you agree with most?"},
+  {cat:"Community Vibes",intent:"Warm up",type:"Current Obsession",best:"New members",text:"What's the one marketing tactic or tool you're currently obsessed with? 🤩\n\nDrop it below — let's build a list.",gif:"Someone excitedly opening a gift",followUp:"This thread is basically a free marketing toolkit. Screenshot it."},
+  {cat:"Wins & Brags",intent:"Credibility",type:"Campaign Win",best:"Warm community",text:"What's a campaign, launch, or content piece that actually WORKED for you recently?\nNumbers, outcomes, or just the vibe — I want to hear it. 📊",gif:"Confetti explosion",followUp:"THIS is what I love. Real results. No fluff. Keep them coming."},
+  {cat:"Wins & Brags",intent:"Credibility",type:"Best Client Win",best:"Pre-launch",text:"What's the best result a client of yours has gotten from your marketing help?\nShare it below — this thread is for bragging. 🏆",gif:"Standing ovation",followUp:"This thread is basically a testimonial wall. Screenshot it. 📸"},
+  {cat:"Hot Takes",intent:"Boost comments",type:"Hot Take",best:"Mid-week",text:"Hot take: most people's content isn't converting because it's TOO POLISHED. 🔥\n\nRaw, real, and relatable beats produced every single time.\n\nAgree or disagree? 👇",gif:"Throwing a grenade and walking away",followUp:"The debate is LIVE. Where do you stand?"},
+  {cat:"Hot Takes",intent:"Boost comments",type:"Myth Buster",best:"Authority building",text:"What's one marketing 'best practice' that's actually outdated BS? 🙅\n\nI'll go first...",gif:"Explosion demolishing a building",followUp:"We're basically rebuilding the marketing rulebook in this thread. You're all hired."},
+  {cat:"Hot Takes",intent:"Boost comments",type:"The Ick List",best:"Any stage",text:"What's your biggest online marketing ick right now? 😬\n\nLet's crowdsource the do-not-do list.",gif:"Full body shudder cringe",followUp:"We all collectively agreed on like 4 of these. The industry has been warned. 😂"},
+  {cat:"Fill in the Blank",intent:"Boost comments",type:"Finish The Sentence",best:"Any day",text:"Finish this sentence:\n\"The biggest mistake I made in my marketing before I figured it out was ___\" 💡\n\nDrop it. No judgment.",gif:"Someone furiously typing",followUp:"Every one of these is a lesson someone else needed. Thank you for being real."},
+  {cat:"Your Magic",intent:"Share your magic",type:"One Framework",best:"Authority building",text:"What's ONE marketing principle or strategy you keep coming back to no matter what?\nExplain it in 3-5 sentences. 📣",gif:"Someone nodding furiously",followUp:"Save this thread. It's better than most paid courses I've seen."},
+  {cat:"Your Magic",intent:"Share your magic",type:"Founder Story",best:"New members",text:"In one paragraph — who do you help with marketing, and what changes for them? ✨\nKeep it real, not corporate.",gif:"Coffee shop conversation",followUp:"Love these. If someone's vibe matches yours — reach out. That's how collabs start."},
+  {cat:"Drive to Classroom",intent:"Drive to classroom",type:"Implementation Thread",best:"Post-lesson",text:"Who implemented the [STRATEGY NAME] from the classroom this week? 📣\n\nDrop your results or questions below.\nNo result is too small to share.",gif:"Person taking notes intensely",followUp:"These results are already showing up. Who's next? Go get it."},
+  {cat:"Launch Support",intent:"Launch support",type:"Offer Tease",best:"Pre-launch",text:"Building something that I think will 10x the way you approach [TOPIC]. 👀\n\nWant early access? Drop a 📣 below.",gif:"Curtain about to open",followUp:"DMs are open. If you dropped a 📣 I'm coming to you first."},
+  {cat:"Launch Support",intent:"Launch support",type:"Poll Warmup",best:"Cart open",text:"Quick question before I open the doors:\n\nWhat's your BIGGEST marketing challenge right now?\n\n→ Getting visible\n→ Converting followers to buyers\n→ Knowing what content to create\n→ Something else (drop it below) 👇",gif:"Person thinking deeply",followUp:"Okay this tells me everything. Let me show you how I can help with exactly this."},
+],
+
+fitness: [
+  {cat:"Community Vibes",intent:"Warm up",type:"Vibe Check",best:"Any day",text:"Fitness vibe check — where are you at this week? 💪\n\n🔥 crushing every session\n📈 slow and steady progress\n😴 rest and recovery mode\n🤯 starting from scratch",gif:"Rocky training montage",followUp:"Wherever you're at — what's ONE thing you're proud of this week, no matter how small?"},
+  {cat:"Community Vibes",intent:"Warm up",type:"Unpopular Opinion",best:"Established community",text:"Unpopular fitness opinion? Don't hold back. 💪\n\nI'll start: rest days are part of the program, not a failure. 🙋",gif:"Judge Judy leaning forward",followUp:"Some of these are going to shake the fitness industry. Which one resonates most?"},
+  {cat:"Community Vibes",intent:"Warm up",type:"Two Truths One Lie",best:"Getting-to-know-you",text:"Two truths and a lie about your fitness journey.\nGo. We'll guess 👇",gif:"Wheel of Fortune spinning",followUp:"Reveal time! Which one was the lie?!"},
+  {cat:"Wins & Brags",intent:"Credibility",type:"Client Win",best:"Warm community",text:"What's the best non-scale victory a client of yours has had recently? 🏆\n\nShare it — we're celebrating here.",gif:"Confetti explosion",followUp:"THESE are the wins that matter. Any other non-scale victories in the thread?"},
+  {cat:"Wins & Brags",intent:"Credibility",type:"Personal Win",best:"Any day",text:"Humble brag time — what fitness win are you proud of this week? 💪\n\nOne sentence. No downplaying it.",gif:"Person flexing proudly",followUp:"This community is OUT HERE doing the work. Keep going."},
+  {cat:"Hot Takes",intent:"Boost comments",type:"Hot Take",best:"Mid-week",text:"Hot take: most people fail their fitness goals not because of the workout — but because of the identity. 🔥\n\nYou have to see yourself as someone who works out BEFORE you start showing up consistently.\n\nAgree? 👇",gif:"Mic drop",followUp:"The replies are going deep. What shifted your identity around fitness?"},
+  {cat:"Hot Takes",intent:"Boost comments",type:"Myth Buster",best:"Authority building",text:"What's one fitness myth you're DONE seeing circulate the internet? 🙅\n\nI'll go first...",gif:"Explosion demolishing building",followUp:"We're busting myths and saving lives in this thread. 😂 Which one was most surprising?"},
+  {cat:"Fill in the Blank",intent:"Boost comments",type:"Finish The Sentence",best:"Any day",text:"Finish this sentence:\n\"I used to think ___ about fitness until I learned better.\" 💡\n\nDrop it below.",gif:"Someone furiously typing",followUp:"This thread is the glow-up we all needed. Which one hits home the most?"},
+  {cat:"Your Magic",intent:"Share your magic",type:"One Tip",best:"Authority building",text:"What's ONE nutrition or training tip that you give every single client no matter what?\n\nShare it below. Let's learn from each other. 💪",gif:"Someone nodding furiously",followUp:"Save this thread — it's free coaching gold."},
+  {cat:"Your Magic",intent:"Share your magic",type:"Founder Story",best:"New members",text:"In one paragraph — who do you help and what changes for them? 🏋️\nWrite it like you'd say it to a friend, not a client.",gif:"Coffee shop conversation",followUp:"Love these. If someone's approach resonates with yours — reach out. Collabs happen here."},
+  {cat:"Drive to Classroom",intent:"Drive to classroom",type:"Implementation Thread",best:"Post-lesson",text:"Who completed [WORKOUT/MODULE] this week? 🎓💪\n\nDrop a ✅ if you did it.\nDrop your biggest win or struggle below.",gif:"Person taking notes intensely",followUp:"Every ✅ in this thread matters. Who's still going? Keep pushing."},
+  {cat:"Launch Support",intent:"Launch support",type:"Offer Tease",best:"Pre-launch",text:"Something new is dropping and it's going to change how you approach [FITNESS GOAL]. 👀\n\nDrop a 💪 if you want to hear about it first.",gif:"Curtain about to open",followUp:"DMs are open. If you dropped a 💪 — you're getting early access."},
+  {cat:"Launch Support",intent:"Launch support",type:"Objection Buster",best:"Cart open",text:"What's the ONE thing that stops you from committing to a fitness program?\n\nBe honest. I'm not here to sell — I want to understand. 🤔",gif:"Person thinking deeply",followUp:"Thank you for the honesty. Let me address every single one of these."},
+  {cat:"Community Vibes",intent:"Warm up",type:"Rate Your Week",best:"End of week",text:"Rate your health and fitness week out of 10. 🔢\n\nDrop your number AND what you're doing better next week. Let's go.",gif:"Scorecard being revealed",followUp:"No shame in a 3/10 week — what's ONE change for next week?"},
+],
+
+finance: [
+  {cat:"Community Vibes",intent:"Warm up",type:"Vibe Check",best:"Any day",text:"Financial vibe check — where are you at? 💰\n\n📈 stacking and investing\n💡 learning and building\n😬 spinning my wheels\n🌱 starting from zero",gif:"Stock market ticker",followUp:"No matter where you are — what's ONE financial move you're proud of recently?"},
+  {cat:"Community Vibes",intent:"Warm up",type:"Unpopular Opinion",best:"Established community",text:"Unpopular money opinion? Go. 💰\n\nI'll start: waiting until you 'have more money' to start investing is why most people never build wealth.",gif:"Judge Judy leaning forward",followUp:"The spicy takes are IN. Which one do you agree with most?"},
+  {cat:"Community Vibes",intent:"Warm up",type:"Money Memory",best:"Getting-to-know-you",text:"What's your earliest money memory? 💭\n\nWas it a lesson, a fear, or a fun moment?\nDrop it below — no judgment.",gif:"Someone remembering something",followUp:"Money psychology is wild. How much of your current relationship with money comes from that early memory?"},
+  {cat:"Wins & Brags",intent:"Credibility",type:"Financial Win",best:"Warm community",text:"Drop your most recent financial win — no matter how small. 💰🏆\n\nPaid off a bill? First investment? First $1k month? ALL of it counts.",gif:"Confetti explosion",followUp:"EVERY win in this thread matters. Momentum is momentum. Keep going."},
+  {cat:"Wins & Brags",intent:"Credibility",type:"Client Win",best:"Pre-launch",text:"What's the best financial result a client of yours has achieved? 📈\n\nShare it — this is a brag-friendly zone.",gif:"Standing ovation",followUp:"This thread is proof that financial transformation is real. Who needed to see this today?"},
+  {cat:"Hot Takes",intent:"Boost comments",type:"Hot Take",best:"Mid-week",text:"Hot take: most people's money problems aren't math problems — they're identity problems. 🔥\n\nYou can't out-earn a scarcity mindset.\n\nAgree or fight me. 👇",gif:"Mic drop",followUp:"The debate is live. Where do you land — money as math or money as mindset?"},
+  {cat:"Hot Takes",intent:"Boost comments",type:"Myth Buster",best:"Authority building",text:"What's one piece of financial advice you were taught that turned out to be completely wrong? 🙅\n\nI'll go first...",gif:"Explosion demolishing building",followUp:"We're unlearning generational financial trauma in this thread. Which one hit hardest?"},
+  {cat:"Fill in the Blank",intent:"Boost comments",type:"Finish The Sentence",best:"Any day",text:"Finish this sentence:\n\"Before I understood money, I used to think ___\" 💡\n\nDrop your answer below.",gif:"Someone furiously typing",followUp:"The financial glow-ups in this thread are REAL. Who needed to read this today?"},
+  {cat:"Your Magic",intent:"Share your magic",type:"One Framework",best:"Authority building",text:"What's ONE money principle or strategy you teach that changes everything for your clients? 💰\n\nShare it in 3-5 sentences.",gif:"Someone nodding furiously",followUp:"This thread is worth more than a $500 finance course. Screenshot it."},
+  {cat:"Your Magic",intent:"Share your magic",type:"Founder Story",best:"New members",text:"In one paragraph — who do you help with finances, and what changes for them? 💰\nKeep it real and human.",gif:"Coffee shop conversation",followUp:"Love these. If someone's work aligns with yours — connect. This is how the ecosystem grows."},
+  {cat:"Drive to Classroom",intent:"Drive to classroom",type:"Implementation Thread",best:"Post-lesson",text:"Who implemented [STRATEGY/MODULE] from the classroom this week? 💰\n\nDrop your questions, wins, or 'oh shit' moments below.",gif:"Person taking notes intensely",followUp:"These are the conversations that create real change. Keep bringing it."},
+  {cat:"Launch Support",intent:"Launch support",type:"Offer Tease",best:"Pre-launch",text:"Something is coming that's going to change how you think about [FINANCIAL GOAL]. 👀\n\nDrop a 💰 if you want to hear first.",gif:"Curtain about to open",followUp:"DMs are open for everyone who dropped a 💰."},
+  {cat:"Community Vibes",intent:"Warm up",type:"Money Habit",best:"Any day",text:"What's ONE money habit you started that genuinely changed things for you? 💡\n\nShare it — let's build a habit library.",gif:"Someone writing in journal",followUp:"Save this thread. It's better than most financial content online."},
+],
+
+creative: [
+  {cat:"Community Vibes",intent:"Warm up",type:"Vibe Check",best:"Any day",text:"Creative vibe check — which mode are you in? 🎨\n\n🔥 fully in flow\n🌀 ideas everywhere, zero focus\n😤 blocked and frustrated\n🌱 just warming up",gif:"Artist staring at blank canvas",followUp:"What gets you OUT of a creative block fastest? Drop it below."},
+  {cat:"Community Vibes",intent:"Warm up",type:"Unpopular Opinion",best:"Established community",text:"Unpopular opinion in the content / creative space? Go. 🎨\n(I live for the spicy ones 😂)",gif:"Judge Judy leaning forward",followUp:"Some of these need to be said louder. Which one do you agree with most?"},
+  {cat:"Community Vibes",intent:"Warm up",type:"Current Obsession",best:"New members",text:"What tool, app, or creative workflow are you currently obsessed with? 🤩\n\nDrop it — let's build a list.",gif:"Someone excitedly opening laptop",followUp:"This thread just became everyone's new creative toolkit. Screenshot it."},
+  {cat:"Wins & Brags",intent:"Credibility",type:"Piece I'm Proud Of",best:"Warm community",text:"Drop a link or describe the ONE piece of content / creative work you're most proud of recently. 🏆\n\nNo downplaying it.",gif:"Artist stepping back admiring work",followUp:"The talent in this community is UNREAL. Which one made you go wow?"},
+  {cat:"Hot Takes",intent:"Boost comments",type:"Hot Take",best:"Mid-week",text:"Hot take: consistency beats creativity every single time. 🔥\n\nShowing up matters more than being brilliant.\n\nAgree or disagree? 👇",gif:"Mic drop",followUp:"The debate is hot. Where do you land — consistency or creativity?"},
+  {cat:"Hot Takes",intent:"Boost comments",type:"Myth Buster",best:"Authority building",text:"What's the most tired creative or content advice you're done hearing? 🙅\n\nI'll go first...",gif:"Explosion demolishing building",followUp:"We just collectively retired like 6 pieces of advice. Thank you. 😂"},
+  {cat:"Fill in the Blank",intent:"Boost comments",type:"Finish The Sentence",best:"Any day",text:"Finish this sentence:\n\"My best creative work always happens when ___\" 🎨\n\nDrop it below.",gif:"Someone furiously typing",followUp:"Saving every single answer in this thread. This is the real creative process."},
+  {cat:"Fill in the Blank",intent:"Boost comments",type:"The Real Reason",best:"Any day",text:"The REAL reason I do creative work is ___.\n(Not the brand-safe version. The real one.)\n\nGo. 👇",gif:"Truth bomb explosion",followUp:"These answers are why this community is different. Thank you for going there."},
+  {cat:"Your Magic",intent:"Share your magic",type:"One Tip",best:"Authority building",text:"What's ONE thing about your creative process that consistently produces your best work? 🎨\n\nShare it in 2-3 sentences.",gif:"Someone nodding furiously",followUp:"This thread is a masterclass. Who's bookmarking this?"},
+  {cat:"Your Magic",intent:"Share your magic",type:"Founder Story",best:"New members",text:"In one paragraph — who do you help creatively, and what changes for them? ✨\nKeep it real, not polished.",gif:"Coffee shop conversation",followUp:"Love these intros. Someone in here is your next collab partner — reach out."},
+  {cat:"Drive to Classroom",intent:"Drive to classroom",type:"Implementation Thread",best:"Post-lesson",text:"Who worked through [MODULE/LESSON] this week? 🎨\n\nDrop your biggest takeaway or the thing you're going to try first.",gif:"Person taking notes intensely",followUp:"These takeaways are gold. Who's still catching up — no judgment!"},
+  {cat:"Launch Support",intent:"Launch support",type:"Offer Tease",best:"Pre-launch",text:"Something new is coming that I built specifically for [WHO YOU HELP]. 👀\n\nDrop a 🎨 if you want early access.",gif:"Curtain about to open",followUp:"Every 🎨 drop — I'm coming to you first. DMs open."},
+  {cat:"Community Vibes",intent:"Warm up",type:"Rate Your Week",best:"End of week",text:"How creative did you feel this week — rate it 1-10. 🔢\n\nAnd drop ONE thing that either helped or blocked your flow.",gif:"Scorecard being revealed",followUp:"Patterns are showing up in these answers. What's the biggest creativity killer in this community?"},
+],
+
+mindset: [
+  {cat:"Community Vibes",intent:"Warm up",type:"Vibe Check",best:"Any day",text:"Mindset vibe check — where are you at this week? 🧠\n\n🌟 high vibe and focused\n😤 fighting resistance\n🌀 overwhelmed and scattered\n🌱 rebuilding after a setback",gif:"Person meditating then opening eyes",followUp:"No matter where you are — what's ONE thought pattern you're working to shift right now?"},
+  {cat:"Community Vibes",intent:"Warm up",type:"Unpopular Opinion",best:"Established community",text:"Unpopular mindset or personal development opinion? Go. 🧠\n\nI'm tired of pretending some of this stuff is okay. 😂",gif:"Judge Judy leaning forward",followUp:"Some of these are BRAVE. Which one needed to be said the most?"},
+  {cat:"Community Vibes",intent:"Warm up",type:"Limiting Belief",best:"New members",text:"What's one limiting belief you've busted that changed everything for you? 💥\n\nShare it — someone in here needs to hear it.",gif:"Chain breaking",followUp:"This thread is free therapy and I'm here for it. Which one hit hardest?"},
+  {cat:"Wins & Brags",intent:"Credibility",type:"Mindset Win",best:"Warm community",text:"What's a mindset shift you've helped a client make recently that changed everything for them? 🧠🏆\n\nShare it in 2-3 sentences.",gif:"Light bulb moment",followUp:"This is the real work. The numbers and results all follow the mindset."},
+  {cat:"Hot Takes",intent:"Boost comments",type:"Hot Take",best:"Mid-week",text:"Hot take: toxic positivity is just as damaging as negative thinking. 🔥\n\n'Good vibes only' culture is gaslighting people into bypassing their real feelings.\n\nAgree or disagree? 👇",gif:"Mic drop",followUp:"Some of these replies are going to make me write a whole post. Keep going."},
+  {cat:"Hot Takes",intent:"Boost comments",type:"Myth Buster",best:"Authority building",text:"What's one personal development trope you're completely over? 🙅\n\nI'll go first: 'just manifest it' without any action plan.",gif:"Explosion demolishing building",followUp:"We just called out an entire industry. Which one do you agree with most?"},
+  {cat:"Fill in the Blank",intent:"Boost comments",type:"Finish The Sentence",best:"Any day",text:"Finish this sentence:\n\"The thought pattern that was holding me back the most was ___\" 🧠\n\nDrop it below.",gif:"Someone furiously typing",followUp:"Every answer in this thread is someone's breakthrough waiting to happen. Thank you."},
+  {cat:"Fill in the Blank",intent:"Boost comments",type:"The Real Reason",best:"Any day",text:"The real reason I got into mindset coaching was ___.\n(The honest version, not the elevator pitch.)\n\nGo. 👇",gif:"Truth bomb explosion",followUp:"These stories are why people trust you. The real ones always hit hardest."},
+  {cat:"Your Magic",intent:"Share your magic",type:"One Tool",best:"Authority building",text:"What's ONE mindset tool or exercise you come back to over and over with clients? 🧠\n\nShare it in 3-5 sentences.",gif:"Someone nodding furiously",followUp:"This thread is better than a $1k course. Screenshot it."},
+  {cat:"Your Magic",intent:"Share your magic",type:"Founder Story",best:"New members",text:"In one paragraph — who do you help and what changes for them? 🧠\nWrite it like a human, not a brochure.",gif:"Coffee shop conversation",followUp:"Love these. If someone's approach resonates — reach out. This is how the community grows."},
+  {cat:"Drive to Classroom",intent:"Drive to classroom",type:"Implementation Thread",best:"Post-lesson",text:"Who worked through [MODULE] this week? 🧠\n\nDrop ONE insight that shifted something for you.",gif:"Person taking notes intensely",followUp:"These shifts are real. Who's still catching up — go get it."},
+  {cat:"Launch Support",intent:"Launch support",type:"Offer Tease",best:"Pre-launch",text:"Building something for people who are done knowing what to do but keep sabotaging themselves. 👀\n\nDrop a 🧠 if you want to hear first.",gif:"Curtain about to open",followUp:"The 🧠 drops are coming in — DMs open."},
+  {cat:"Community Vibes",intent:"Warm up",type:"Quote Remix",best:"Any day",text:"What's a quote or mantra you keep coming back to lately? 💭\n\nShare it below — let's build a community quote wall.",gif:"Someone writing in journal",followUp:"Save this thread. These are better than any quote account I've seen."},
+],
+
+parenting: [
+  {cat:"Community Vibes",intent:"Warm up",type:"Vibe Check",best:"Any day",text:"Parenting vibe check this week — which one? 👶\n\n😇 actually thriving\n☕ running on caffeine and love\n🤯 is this normal??\n💪 tired but proud",gif:"Parent collapsing into couch while kids run around",followUp:"No matter which one you picked — you're doing better than you think. What's one thing you're proud of this week?"},
+  {cat:"Community Vibes",intent:"Warm up",type:"Unpopular Opinion",best:"Established community",text:"Unpopular parenting opinion? Go. 👶\n\nJudgment-free zone. Say the thing. 😂",gif:"Judge Judy leaning forward",followUp:"NEEDED. Which one are you nodding at the hardest?"},
+  {cat:"Community Vibes",intent:"Warm up",type:"Two Truths One Lie",best:"Getting-to-know-you",text:"Two truths and a lie about parenting your kid(s).\nGo. We'll guess. 😂",gif:"Wheel of Fortune spinning",followUp:"Okay reveal time! Which one was the lie?!"},
+  {cat:"Wins & Brags",intent:"Credibility",type:"Parent Win",best:"Warm community",text:"Drop ONE parenting win from this week. 👶🏆\n\nNo win is too small. Go.",gif:"Confetti explosion",followUp:"This community is full of incredible parents. These wins MATTER."},
+  {cat:"Wins & Brags",intent:"Credibility",type:"Client Win",best:"Pre-launch",text:"What's a breakthrough moment a parent you've worked with had recently? 🏆\n\nShare it — we're celebrating here.",gif:"Standing ovation",followUp:"These transformations are everything. This is why the work matters."},
+  {cat:"Hot Takes",intent:"Boost comments",type:"Hot Take",best:"Mid-week",text:"Hot take: most parenting guilt comes from comparing your real life to someone else's highlight reel. 🔥\n\nThe comparison is the problem, not your parenting.\n\nAgree? 👇",gif:"Mic drop",followUp:"The replies are everything. What's the most common comparison trap you see?"},
+  {cat:"Hot Takes",intent:"Boost comments",type:"Myth Buster",best:"Authority building",text:"What's one piece of parenting advice you've completely stopped believing? 🙅\n\nI'll go first...",gif:"Explosion demolishing building",followUp:"We just dismantled like 5 old-school parenting myths. Which one surprised you most?"},
+  {cat:"Fill in the Blank",intent:"Boost comments",type:"Finish The Sentence",best:"Any day",text:"Finish this sentence:\n\"Nobody told me parenting would be like ___ and I wish someone had.\" 👶\n\nDrop it below.",gif:"Someone furiously typing",followUp:"This thread should be required reading for every new parent. Which one hit home?"},
+  {cat:"Your Magic",intent:"Share your magic",type:"One Tip",best:"Authority building",text:"What's ONE parenting tip or approach you give every family you work with? 👶\n\nShare it in 2-3 sentences.",gif:"Someone nodding furiously",followUp:"This thread is gold. Who's saving it for the hard days?"},
+  {cat:"Your Magic",intent:"Share your magic",type:"Founder Story",best:"New members",text:"In one paragraph — who do you help and what changes for them? 👶\nWrite it like you'd say it to another parent at the school gates.",gif:"Coffee shop conversation",followUp:"Love these intros. If someone's approach resonates — reach out."},
+  {cat:"Drive to Classroom",intent:"Drive to classroom",type:"Implementation Thread",best:"Post-lesson",text:"Who went through [MODULE] this week? 👶\n\nDrop your biggest takeaway or question below.",gif:"Person taking notes intensely",followUp:"These takeaways are showing up in families this week. Keep going."},
+  {cat:"Launch Support",intent:"Launch support",type:"Offer Tease",best:"Pre-launch",text:"Building something for parents who are exhausted, doing their best, and ready for it to feel easier. 👀\n\nDrop a 👶 if you want to hear first.",gif:"Curtain about to open",followUp:"The 👶 drops are rolling in. DMs open."},
+  {cat:"Community Vibes",intent:"Warm up",type:"Rate Your Week",best:"End of week",text:"How did this parenting week feel — rate it 1-10? 🔢\n\nAnd drop what actually made it harder or easier.",gif:"Scorecard being revealed",followUp:"The honesty in this thread is everything. You're all doing amazingly."},
+],
+
+tech: [
+  {cat:"Community Vibes",intent:"Warm up",type:"Vibe Check",best:"Any day",text:"Tech and AI skills vibe check — where are you at? 💻\n\n🚀 building fast and shipping\n🧪 deep in experiments\n😤 stuck on a concept\n🌱 brand new to all of this",gif:"Computer screens with code scrolling",followUp:"What's the ONE thing currently slowing down your learning or building? Let's troubleshoot it together."},
+  {cat:"Community Vibes",intent:"Warm up",type:"Unpopular Opinion",best:"Established community",text:"Unpopular opinion about AI, tech, or the creator economy? Go. 💻\n\nNo softening it. 😂",gif:"Judge Judy leaning forward",followUp:"Some of these are going to age really well. Which one do you agree with most?"},
+  {cat:"Community Vibes",intent:"Warm up",type:"Current Tool",best:"New members",text:"What's the one AI tool or tech stack you couldn't run your business without right now? 🤖\n\nDrop it — let's build a toolkit.",gif:"Someone excitedly opening laptop",followUp:"This thread is basically a free AI toolkit. Screenshot it."},
+  {cat:"Wins & Brags",intent:"Credibility",type:"Build Win",best:"Warm community",text:"What's something you built, shipped, or automated recently that you're proud of? 🏆💻\n\nShare it — even if it's small.",gif:"Someone pressing launch button",followUp:"The builders in this community are WILD. Who wants to collab?"},
+  {cat:"Hot Takes",intent:"Boost comments",type:"Hot Take",best:"Mid-week",text:"Hot take: most people are using AI to do more of the wrong things faster. 🔥\n\nThe real advantage is using it to think better, not just produce more.\n\nAgree? 👇",gif:"Mic drop",followUp:"The tech debate is live. Where do you land on this?"},
+  {cat:"Hot Takes",intent:"Boost comments",type:"Myth Buster",best:"Authority building",text:"What's one tech or AI myth you're done seeing repeated? 🙅\n\nI'll go first...",gif:"Explosion demolishing building",followUp:"The tech literacy in this thread is impressive. Which one surprised you most?"},
+  {cat:"Fill in the Blank",intent:"Boost comments",type:"Finish The Sentence",best:"Any day",text:"Finish this sentence:\n\"Before I learned [SKILL], I used to waste so much time on ___\" 💡\n\nDrop it below.",gif:"Someone furiously typing",followUp:"Every answer here is someone else's light bulb moment. Keep them coming."},
+  {cat:"Your Magic",intent:"Share your magic",type:"One Framework",best:"Authority building",text:"What's ONE tech or AI skill that you think every online entrepreneur needs to learn in the next 12 months? 💻\n\nTell us what it is and why.",gif:"Someone nodding furiously",followUp:"This thread is going to look prophetic in 2 years. Screenshot it."},
+  {cat:"Your Magic",intent:"Share your magic",type:"Founder Story",best:"New members",text:"In one paragraph — who do you teach and what changes for them? 💻\nKeep it human, not technical.",gif:"Coffee shop conversation",followUp:"Love these intros. If someone's work resonates — connect. Collabs start here."},
+  {cat:"Drive to Classroom",intent:"Drive to classroom",type:"Implementation Thread",best:"Post-lesson",text:"Who went through [LESSON / MODULE] this week? 💻\n\nDrop what you built, tried, or learned — even if it broke the first time.",gif:"Person taking notes intensely",followUp:"These builds and experiments are the whole point. Who's still catching up?"},
+  {cat:"Launch Support",intent:"Launch support",type:"Offer Tease",best:"Pre-launch",text:"Building something that's going to make [SKILL/TOOL] genuinely accessible even if you're not technical. 👀\n\nDrop a 💻 if you want early access.",gif:"Curtain about to open",followUp:"DMs are open for everyone who dropped a 💻."},
+  {cat:"Community Vibes",intent:"Warm up",type:"Rate Your Learning",best:"End of week",text:"How much did you learn this week — rate it 1-10. 🔢\n\nAnd drop the ONE thing that clicked the most.",gif:"Scorecard being revealed",followUp:"The learning happening in this community is unreal. Keep building."},
+],
+
+realestate: [
+  {cat:"Community Vibes",intent:"Warm up",type:"Vibe Check",best:"Any day",text:"Real estate investor vibe check — where are you at? 🏠\n\n🔑 active and closing deals\n🔍 hunting for the right deal\n📚 learning the game\n😤 stuck and figuring it out",gif:"Someone surveying a property",followUp:"No matter where you are — what's ONE move you're making this week?"},
+  {cat:"Community Vibes",intent:"Warm up",type:"Unpopular Opinion",best:"Established community",text:"Unpopular real estate investing opinion? Go. 🏠\n\nDon't hold back. 😂",gif:"Judge Judy leaning forward",followUp:"Some of these are going to start wars and I'm here for it. Which one do you agree with most?"},
+  {cat:"Community Vibes",intent:"Warm up",type:"First Deal",best:"New members",text:"Tell us about your first real estate deal in one sentence. 🏠\n\nWas it amazing, terrible, or both? 😂",gif:"Keys being handed over",followUp:"First deals are always the wildest. What would you do differently now?"},
+  {cat:"Wins & Brags",intent:"Credibility",type:"Deal Win",best:"Warm community",text:"Drop your most recent real estate win — deal closed, offer accepted, passive income hit, ANYTHING. 🏆🏠\n\nWe're celebrating here.",gif:"Confetti explosion",followUp:"The portfolio in this community combined must be incredible. Keep stacking those wins."},
+  {cat:"Hot Takes",intent:"Boost comments",type:"Hot Take",best:"Mid-week",text:"Hot take: most people wait for the 'perfect deal' and miss 10 good ones in the meantime. 🔥\n\nDone is better than perfect in real estate.\n\nAgree or disagree? 👇",gif:"Mic drop",followUp:"The debate is live. Are you a wait-for-perfect or done-is-better person?"},
+  {cat:"Hot Takes",intent:"Boost comments",type:"Myth Buster",best:"Authority building",text:"What's one real estate investing myth you're completely over? 🙅\n\nI'll go first: 'you need a lot of money to start'.",gif:"Explosion demolishing building",followUp:"We just busted like 6 myths that stop people from getting started. Which one do you hear the most?"},
+  {cat:"Fill in the Blank",intent:"Boost comments",type:"Finish The Sentence",best:"Any day",text:"Finish this sentence:\n\"The biggest mistake I made in my first real estate deal was ___\" 🏠\n\nDrop it — your lesson could save someone.",gif:"Someone furiously typing",followUp:"Every answer in this thread is free education. Which one is the most expensive lesson?"},
+  {cat:"Your Magic",intent:"Share your magic",type:"One Strategy",best:"Authority building",text:"What's ONE real estate strategy or principle you come back to over and over? 🏠\n\nShare it in 3-5 sentences.",gif:"Someone nodding furiously",followUp:"This thread is better than most paid real estate courses. Screenshot it."},
+  {cat:"Your Magic",intent:"Share your magic",type:"Founder Story",best:"New members",text:"In one paragraph — who do you help in real estate and what changes for them? 🏠\nWrite it like a human.",gif:"Coffee shop conversation",followUp:"Love these intros. If someone's strategy aligns — connect. Deals and partnerships start here."},
+  {cat:"Drive to Classroom",intent:"Drive to classroom",type:"Implementation Thread",best:"Post-lesson",text:"Who went through [MODULE/LESSON] this week? 🏠\n\nDrop your biggest insight or a question you still have.",gif:"Person taking notes intensely",followUp:"These questions and insights are exactly what this community is for. Keep bringing it."},
+  {cat:"Launch Support",intent:"Launch support",type:"Offer Tease",best:"Pre-launch",text:"Building something that's going to shortcut the learning curve for new real estate investors massively. 👀\n\nDrop a 🏠 if you want early access.",gif:"Curtain about to open",followUp:"DMs open for everyone who dropped a 🏠."},
+  {cat:"Community Vibes",intent:"Warm up",type:"Market Check",best:"Any day",text:"What's your local real estate market doing right now? 📊\n\nDrop your city/region and one sentence on what you're seeing.",gif:"Market chart going up",followUp:"The market intelligence in this thread is incredible. What's your prediction for the next 6 months?"},
+],
+
+};
+
+/* ════════════════════════════════════════════════════
+   THIS OR THAT DATA — per niche
+   ════════════════════════════════════════════════════ */
+const totData = {
+  spiritual:[
+    {title:"THIS OR THAT ✨ Spiritual Biz Edition",questions:["Podcast 🎙️ or Instagram Lives 📱","Human Design 🔮 or Astrology ⭐","Written content ✍️ or Video content 🎥","Group program 🌀 or 1:1 coaching 💎","Manifestation journaling 📓 or Meditation practice 🧘","Morning ritual ☀️ or Evening wind-down 🌙"],followUp:"Drop your answers below — let's see who the most aligned human in here is 😂"},
+    {title:"THIS OR THAT 🔮 Business Flow",questions:["Batching content 📦 or Creating daily ✨","Launches 🚀 or Evergreen offers 🌱","Free Facebook group 👥 or Paid Skool community 💰","Canva queen 🎨 or Raw & real aesthetic 📱","Charging per session 💸 or Packages only 📋","Strategy first 🗺️ or Intuition first 🔮"],followUp:"No wrong answers here. Which combo describes your current business model?"},
+  ],
+  coaching:[
+    {title:"THIS OR THAT 🎯 Coach Edition",questions:["Group coaching 👥 or 1:1 intensive 💎","Zoom calls 💻 or In-person sessions 🤝","90-day container 📆 or Monthly retainer 💳","Niche down hard 🎯 or Stay broad 🌍","Lead with story 📖 or Lead with results 📊","Live training 🎥 or Pre-recorded course 🎓"],followUp:"Drop your answers below! No wrong combos — just different strategies."},
+    {title:"THIS OR THAT 💡 Client Work",questions:["Discovery call 📞 or Application only 📝","Workbooks included 📋 or Pure conversation 💬","Accountability partner 🤝 or Solo journey 🚶","Check-ins between sessions ✅ or Sessions only 📆","Voxer support 🎙️ or Email support ✉️","Transform mindset 🧠 or Transform strategy 🗺️"],followUp:"Which combo is closest to how you work with clients right now?"},
+  ],
+  marketing:[
+    {title:"THIS OR THAT 📣 Marketer Edition",questions:["SEO content 🔍 or Social content 📱","Long form video 🎥 or Short form reels ⚡","Email list 📧 or Community platform 👥","Paid ads 💰 or Organic only 🌱","Data-driven 📊 or Intuition-driven 🔮","Repurpose everything ♻️ or Create fresh always ✨"],followUp:"Drop your strategy combo below — let's see what's working for people!"},
+    {title:"THIS OR THAT 🚀 Launch Strategy",questions:["Live launch 🎥 or Evergreen funnel 🌱","Webinar 💻 or Challenge 🏋️","Short sales page 📄 or Long sales page 📜","Launch to email list 📧 or Launch to community 👥","Big launch team 👥 or Solo operator 🦸","Countdown timer ⏱️ or No urgency pressure 🌊"],followUp:"Which launch setup sounds most like you right now?"},
+  ],
+  fitness:[
+    {title:"THIS OR THAT 💪 Fitness Edition",questions:["Morning workout ☀️ or Evening workout 🌙","Gym 🏋️ or Home workouts 🏠","Cardio first 🏃 or Lifting first 🏋️","Track macros 📊 or Intuitive eating 🌱","Personal trainer 💪 or Self-programmed 📋","Rest day guilt 😤 or Rest day bliss 😴"],followUp:"Drop your combo below! Let's see how everyone trains."},
+    {title:"THIS OR THAT 🥗 Health Habits",questions:["Meal prep Sunday 🥡 or Cook fresh daily 🍳","Coffee first ☕ or Water first 💧","Stretching daily 🧘 or Skip it when busy 😅","8 hours sleep 😴 or 6 hours and grind 💪","Protein shake 🥤 or Whole food only 🥩","Track everything 📱 or Go by feel 🤷"],followUp:"Which combo is your current reality vs your goal reality? Be honest 😂"},
+  ],
+  finance:[
+    {title:"THIS OR THAT 💰 Money Edition",questions:["Invest first 📈 or Save first 🏦","Stocks 📊 or Real estate 🏠","Side hustle 💼 or Climb the ladder 🪜","Budget strict 📋 or Budget flexible 🌊","Pay off debt first 💸 or Invest while in debt 📈","Financial advisor 👔 or Self-directed 📚"],followUp:"Drop your money strategy below — let's see what's working for people."},
+    {title:"THIS OR THAT 🏦 Wealth Building",questions:["Multiple income streams 🌊 or One big income source 🎯","Aggressive savings 💰 or Lifestyle now 🌴","Index funds 📊 or Individual stocks 📈","Frugal living 🏡 or Earn more spend more 🚀","Cash reserve 6 months 🏦 or Fully invested 📈","Roth IRA 📋 or Traditional IRA 🏛️"],followUp:"No right or wrong here — just different approaches to the same goal. What's your current strategy?"},
+  ],
+  creative:[
+    {title:"THIS OR THAT 🎨 Creator Edition",questions:["Batch and schedule 📅 or Post in the moment ⚡","Aesthetic feed 🖼️ or Raw and real 📱","Write scripts 📝 or Talk off the cuff 🎙️","Face on camera 📸 or Stay behind the scenes 🎭","Canva templates 🎨 or Custom design every time ✨","Post daily 📆 or Post when inspired 🌟"],followUp:"Drop your approach below — no wrong answers, just different creative styles!"},
+    {title:"THIS OR THAT ✍️ Content Creation",questions:["Long captions 📝 or Short punchy captions ⚡","Educational content 🎓 or Entertainment content 😂","Trending audio 🎵 or Original content 🎤","Engagement pods 👥 or Organic only 🌱","Plan a month ahead 🗓️ or Wing it weekly 🤷","Video first 🎥 or Written first ✍️"],followUp:"Which combo describes your content strategy right now vs where you want to be?"},
+  ],
+  mindset:[
+    {title:"THIS OR THAT 🧠 Mindset Edition",questions:["Journaling 📓 or Meditation 🧘","Therapy 🛋️ or Coaching 🎯","Affirmations 💬 or Visualization 🌟","Morning pages ☀️ or Evening reflection 🌙","Talk it out 💬 or Process alone 🤫","Shadow work 🌑 or Future self work 🌟"],followUp:"Drop your combo below — let's see what tools this community swears by!"},
+    {title:"THIS OR THAT 💭 Personal Growth",questions:["Read daily 📚 or Podcast daily 🎙️","Challenge comfort zone weekly 💪 or Gradual slow growth 🌱","Cold showers 🥶 or Warm cosy mornings ☕","Group support 👥 or Solo inner work 🦸","Vision board 🖼️ or Written goals 📋","Heal the root 🌿 or Build new habits 🔄"],followUp:"Which tools are actually working for you right now? Be honest!"},
+  ],
+  parenting:[
+    {title:"THIS OR THAT 👶 Parenting Edition",questions:["Strict routine 📅 or Go with the flow 🌊","Screen time limits 📱 or Screen time freedom 🎮","Montessori approach 🌿 or Traditional schooling 📚","Family bed 🛏️ or Own room from day 1 🚪","Extracurriculars packed 🏊 or Keep it simple 🌱","Talk through emotions 💬 or Let them work it out 🤷"],followUp:"Drop your approach below — no judgment, just curiosity!"},
+    {title:"THIS OR THAT 🏡 Family Life",questions:["Meal plan weekly 🥡 or Decide day of 🍳","Family meeting weekly 👨‍👩‍👧 or Just go with it 🌊","Digital-free hours 📵 or Tech as a tool 💻","Chore chart ✅ or Natural responsibilities 🌱","Quality time planned 📅 or Spontaneous moments ✨","Boundaries with grandparents 🚧 or Open door always 🚪"],followUp:"Which one do you wish someone had talked to you about before becoming a parent?"},
+  ],
+  tech:[
+    {title:"THIS OR THAT 💻 Tech Creator Edition",questions:["Build with AI 🤖 or Code from scratch 💻","No-code tools ⚡ or Low-code builds 🛠️","Ship fast 🚀 or Perfect before launch ✨","YouTube tutorials 🎥 or Written documentation 📄","Public build in public 📣 or Work quietly then launch 🤫","Specialize deep 🎯 or Learn broad 🌍"],followUp:"Drop your approach — let's see how builders in this community operate!"},
+    {title:"THIS OR THAT 🤖 AI Skills",questions:["ChatGPT 🤖 or Claude ✨","Voice memos 🎙️ or Text prompting ✍️","AI for content ✍️ or AI for automation ⚙️","One AI tool mastered 🎯 or Many tools combined 🌐","Share your prompts publicly 📣 or Keep them proprietary 🔐","AI replaces tasks 🔄 or AI augments thinking 🧠"],followUp:"Which combo describes how you're using AI in your business right now?"},
+  ],
+  realestate:[
+    {title:"THIS OR THAT 🏠 Investor Edition",questions:["Fix and flip 🔨 or Buy and hold 📈","Single family 🏡 or Multi-family 🏢","Long term rentals 📆 or Short term rentals ✈️","Active investing 💼 or Passive investing 🛋️","Leverage debt 💳 or Cash purchases only 💰","Local market 📍 or Long distance investing 🌍"],followUp:"Drop your strategy below — let's see what's working for people right now!"},
+    {title:"THIS OR THAT 🔑 Deal Strategy",questions:["MLS deals 🔍 or Off market only 📬","Agent-assisted 👔 or Direct to seller 🤝","Solo investing 🦸 or Joint ventures 👥","Residential 🏡 or Commercial 🏢","Market timing 📊 or Always buying 🛒","Cash flow focus 💰 or Appreciation focus 📈"],followUp:"Which combo is your current real estate strategy? What's working best right now?"},
+  ],
+};
+
+/* ════════════════════════════════════════════════════
+   POLL DATA — per niche
+   ════════════════════════════════════════════════════ */
+const pollData = {
+  spiritual:[
+    {intro:"Curious about where everyone is at right now 🔮", question:"What's your biggest challenge in your spiritual business?", options:["Pricing my offerings confidently 💸","Showing up consistently online 📱","Finding aligned clients 🌟","Balancing the spiritual with the strategic 🧘‍♀️"], followUp:"Based on what you're sharing — this is what I want to create more content around. Which one is MOST urgent for you right now?"},
+    {intro:"Let's do a quick poll for fun 😂", question:"How do you feel about selling your spiritual work?", options:["Totally at peace with it 💰✨","Still working through the ick 😬","I charge based on energy not strategy 🔮","I give too much away for free 🙈"], followUp:"No judgment here — this is something almost every spiritual entrepreneur navigates. What would help you the most?"},
+    {intro:"Research question for a resource I'm building 🙋", question:"Which content format gets you the most traction?", options:["Instagram posts 📸","Long-form videos or Lives 🎥","Email newsletters ✉️","Community posts like this one 👇"], followUp:"Interesting! I'm going to create more of what's working. What do YOUR audience engage with most?"},
+  ],
+  coaching:[
+    {intro:"Quick research poll — super curious about this 🎯", question:"What's your biggest challenge in growing your coaching business?", options:["Getting consistent leads 🔍","Converting discovery calls 📞","Pricing my packages right 💰","Keeping clients long-term 🤝"], followUp:"This tells me a lot about where the gaps are. Which ONE of these would change everything if you solved it?"},
+    {intro:"This one's for the coaches in the room 💡", question:"How do you primarily attract new coaching clients?", options:["Word of mouth and referrals 🗣️","Social media content 📱","Paid ads 💰","Networking and partnerships 🤝"], followUp:"Fascinating — the diversity of answers here shows there's no single right way. What's working BEST for you right now?"},
+    {intro:"Let's get real about this for a second 📋", question:"How do you feel about your current client roster?", options:["Full and thriving 🔥","Almost there — need 2-3 more 📈","Actively looking for new clients 🔍","In a feast or famine cycle 😅"], followUp:"Wherever you are — that's data. What's the ONE thing that would stabilise your client flow?"},
+  ],
+  marketing:[
+    {intro:"Genuine curiosity — let's see where everyone is at 📣", question:"What's eating the most time in your marketing right now?", options:["Creating content 🎨","Figuring out strategy 🗺️","Building systems and automations ⚙️","Analysing what's actually working 📊"], followUp:"Based on these answers I know exactly what to create next. Which one is costing you the most in lost revenue?"},
+    {intro:"Quick poll for the marketers here 🚀", question:"Which platform is driving the most leads for you right now?", options:["Instagram or TikTok 📱","YouTube or podcasts 🎥","Email list 📧","Community / Skool 👥"], followUp:"Interesting split! What's the platform you WISH was working better for you?"},
+    {intro:"Be honest — this is a judgment-free zone 😂", question:"How clear is your content strategy right now?", options:["Crystal clear and documented 📋","I have a rough idea 🤷","I post when I have ideas 💡","What is a strategy 😅"], followUp:"No shame in any answer — this is where most entrepreneurs actually are. What would help you most to get clarity?"},
+  ],
+  fitness:[
+    {intro:"Quick poll for the fitness community 💪", question:"What's your biggest struggle with consistency right now?", options:["Motivation on the hard days 😤","Finding time to train 🕐","Not seeing results fast enough 📊","Knowing what program to follow 📋"], followUp:"These answers are going to shape the content I create next. Which one is most urgent for you?"},
+    {intro:"Fitness coaches — this one's for you 🏋️", question:"Where do most of your new clients come from?", options:["Instagram content 📱","Word of mouth 🗣️","In-person community 🤝","Online ads 💰"], followUp:"There's no single winning strategy here — what's been the most sustainable source for you?"},
+    {intro:"Let's get real about this 😂", question:"How do you feel about your current training routine?", options:["Loving it and seeing results 🔥","Consistent but plateaued 📊","Inconsistent and frustrated 😤","Starting fresh again 🌱"], followUp:"No judgment — plateaus and restarts are part of the journey. What's one thing that would make this easier?"},
+  ],
+  finance:[
+    {intro:"Financial check-in for the community 💰", question:"Where are you in your wealth-building journey?", options:["Building my emergency fund first 🏦","Paying off debt aggressively 💸","Actively investing and growing 📈","Creating multiple income streams 🌊"], followUp:"Every stage is valid. What's the ONE move that would accelerate your journey the most right now?"},
+    {intro:"Honest money question for the room 💡", question:"What's your biggest money block right now?", options:["Spending more than I earn 😬","Not knowing where to start investing 📊","Fear of making the wrong money move 😰","Not making enough to invest yet 💸"], followUp:"These are real and valid. Which one would make the biggest difference to address first?"},
+    {intro:"Finance nerds — quick poll 📊", question:"Which financial tool do you use most?", options:["Spreadsheet tracker 📋","Budgeting app like YNAB 📱","Investment platform 📈","Just my bank app 🏦"], followUp:"Interesting! What's the tool you wish you'd started using sooner?"},
+  ],
+  creative:[
+    {intro:"Creators — quick pulse check 🎨", question:"What's your biggest content creation challenge?", options:["Running out of ideas 💭","Being consistent with posting 📅","Getting engagement on what I create 💬","Converting followers to paying clients 💰"], followUp:"These answers are going to shape what I teach next. Which one is costing you the most right now?"},
+    {intro:"Content question for the creatives 📱", question:"How many pieces of content do you create per week?", options:["1-2 (quality over quantity) ✨","3-5 (consistent cadence) 📅","6+ (posting machine mode) 🔥","Whenever inspiration strikes 🌟"], followUp:"There's no perfect number — what matters is what's sustainable FOR YOU. What's your goal?"},
+    {intro:"Be honest with me 😂", question:"How does posting content make you feel?", options:["I love it — it's my thing 🎨","I do it but it drains me 😩","It gives me anxiety 😰","I post and immediately want to delete it 😅"], followUp:"You are not alone in ANY of these answers. What would make content creation feel better?"},
+  ],
+  mindset:[
+    {intro:"Mindset pulse check for the community 🧠", question:"What's the biggest thing getting in your way right now?", options:["Self-doubt and imposter syndrome 😬","Overthinking and perfectionism 🌀","Fear of what others think 👀","Procrastination and avoidance 😴"], followUp:"Every single one of these is common and workable. Which one is most persistent for you?"},
+    {intro:"Honest question — no judgment here 💭", question:"How's your mindset practice right now?", options:["Consistent and working 🧘","Inconsistent but I try 🤷","I know I need one but haven't started 😅","I practice when things get hard 🆘"], followUp:"Consistency is the hard part. What's the ONE thing that would make your practice more sustainable?"},
+    {intro:"For the mindset coaches in the room 🎯", question:"What do your clients struggle with most before working with you?", options:["Confidence and self-belief 💪","Clarity on what they actually want 🗺️","Taking action despite fear 🚀","Breaking out of old patterns 🔄"], followUp:"This is such useful data. Which one do you feel most equipped to help with?"},
+  ],
+  parenting:[
+    {intro:"Parenting check-in — be honest 👶😂", question:"How are you ACTUALLY doing this week?", options:["Thriving and loving it 🌟","Surviving on caffeine ☕","One meltdown away from my own meltdown 😅","Honestly I have no idea 🤷"], followUp:"No judgment — parenting is HARD. What's one thing that would make this week easier?"},
+    {intro:"For the parenting coaches here 🏡", question:"What do parents come to you with most?", options:["Big emotions and meltdowns 🌊","Sleep issues 😴","Sibling conflict 👫","General overwhelm and guilt 😰"], followUp:"These themes are universal. Which one do you feel most uniquely equipped to help with?"},
+    {intro:"Parent poll — quick one 👶", question:"What's your biggest parenting challenge right now?", options:["Setting boundaries without guilt 🚧","Managing my own emotions first 🧘","Balancing work and family time ⚖️","Connecting deeply when I'm exhausted 💫"], followUp:"These answers tell me exactly where to focus the next few pieces of content. Which one is most urgent?"},
+  ],
+  tech:[
+    {intro:"Tech community pulse check 💻", question:"Where are you in your AI / tech skills journey?", options:["Total beginner — just starting 🌱","Intermediate — using some tools 🛠️","Advanced — building with AI 🚀","Expert — teaching others 🎓"], followUp:"No matter your level — what's the ONE skill you're focused on developing most right now?"},
+    {intro:"For the tech educators here 🤖", question:"What's the biggest barrier your students face?", options:["Overwhelm with all the tools 🌀","Fear of getting it wrong 😬","No time to learn and practice 🕐","Not knowing where to start 🗺️"], followUp:"These barriers are all addressable. Which one do you tackle most directly in your teaching?"},
+    {intro:"Quick AI poll — curious where everyone is 🤖", question:"How are you using AI in your business right now?", options:["Content creation and writing ✍️","Automation and workflows ⚙️","Customer support and responses 💬","Research and analysis 📊"], followUp:"Interesting — the use cases are so varied. What's the ROI you're getting from your AI tools?"},
+  ],
+  realestate:[
+    {intro:"Real estate community pulse check 🏠", question:"What stage of investing are you in?", options:["Looking for my first deal 🔍","Building my first portfolio 📈","Scaling an existing portfolio 🚀","Teaching and mentoring others 🎓"], followUp:"Great spread of experience here. What's the ONE question you wish you'd known the answer to at your current stage?"},
+    {intro:"Investor question — be real with me 📊", question:"What's holding you back from your next deal?", options:["Capital and financing 💰","Finding the right deal 🔍","Fear of making a mistake 😬","Not having enough time 🕐"], followUp:"Every one of these is solvable. Which one is the most urgent blocker for you right now?"},
+    {intro:"For the real estate educators in here 🏡", question:"What do your students struggle with most?", options:["Analysis paralysis — too much research 📊","Fear of the first deal 😰","Understanding financing options 💳","Finding their market and strategy 🗺️"], followUp:"These are the same blocks that stop 90% of aspiring investors. How do you help students push past them?"},
+  ],
+};
+
+/* ════════════════════════════════════════════════════
+   WEEKLY RITUAL DATA — per niche
+   ════════════════════════════════════════════════════ */
+const ritualData = {
+  spiritual:[
+    {day:"Monday",ritual:"Intention Monday",type:"Check-in",text:"Happy Monday, beautiful humans. ✨\n\nOne question to set your week:\n\nWhat do you want to FEEL by Friday?\n\nNot do. Not achieve. FEEL.\n\nDrop it below 👇 Let's hold it together."},
+    {day:"Tuesday",ritual:"Teaching Tuesday",type:"Teaching",text:"Teaching Tuesday drop: 📚\n\nThe #1 reason spiritual entrepreneurs stay undercharging:\n\nThey're waiting to feel 'ready' before raising their rates.\n\nThe readiness comes AFTER the raise. Not before.\n\nWhat's one price you know needs to go up? 👇"},
+    {day:"Wednesday",ritual:"Win Wednesday",type:"Celebration",text:"IT'S WIN WEDNESDAY. 🏆✨\n\nDrop your win from the last 7 days.\nA client result. A boundary set. A post you were scared to publish.\n\nALL of it counts. GO."},
+    {day:"Thursday",ritual:"Hot Take Thursday",type:"Discussion",text:"Hot take Thursday: 🔥\n\nThe spiritual business space talks a LOT about alignment and not enough about OFFERS.\n\nBeing aligned doesn't pay the bills. Having a clear offer that solves a real problem does.\n\nYou can have both. But don't skip the offer.\n\nDiscuss. 👇"},
+    {day:"Friday",ritual:"Fun Friday",type:"Fun",text:"FRIDAY THIS OR THAT ✨\n\nHuman Design 🔮 or Astrology ⭐?\nBatching content 📦 or Daily creating ✨?\nLaunch season 🚀 or Evergreen income 🌱?\n\nDrop your picks below and let's see who the aligned twins are 😂"},
+  ],
+  coaching:[
+    {day:"Monday",ritual:"Intention Monday",type:"Check-in",text:"Monday intention check — 🎯\n\nWhat's the ONE outcome you're committed to creating this week?\n\nNot a to-do list. One outcome.\n\nDrop it below. We'll check back Friday."},
+    {day:"Tuesday",ritual:"Teaching Tuesday",type:"Teaching",text:"Tuesday teaching: 💡\n\nThe coaches growing fastest right now all have one thing in common:\n\nThey talk about their clients' results MORE than their methodology.\n\nNo one buys 'my proprietary framework.'\nThey buy the version of themselves they see in your client stories.\n\nWhat result do you create most consistently? 👇"},
+    {day:"Wednesday",ritual:"Win Wednesday",type:"Celebration",text:"WIN WEDNESDAY IS HERE. 🏆\n\nDrop a client win, a personal win, or a business win from the last 7 days.\n\nNo downplaying. This is a brag-friendly zone."},
+    {day:"Thursday",ritual:"Hot Take Thursday",type:"Discussion",text:"Hot Take Thursday 🔥\n\nMost coaches are overcomplicating their business model.\n\nOne signature offer. One clear client. One traffic source. Rinse. Repeat.\n\nDo you agree or are you building something more complex on purpose? 👇"},
+    {day:"Friday",ritual:"Fun Friday",type:"Fun",text:"FRIDAY THIS OR THAT 🎯\n\n1on1 calls 📞 or Async coaching 📱?\nGroup program 👥 or Mastermind 💎?\nNiche down hard 🎯 or Stay broad 🌍?\n\nDrop your picks. Let's see how coaches here are building! 😂"},
+  ],
+  marketing:[
+    {day:"Monday",ritual:"Strategy Monday",type:"Check-in",text:"Monday marketing check-in 📣\n\nWhat's the ONE marketing task that would make the biggest difference this week if you actually completed it?\n\nDrop it below. Accountability starts now."},
+    {day:"Tuesday",ritual:"Teaching Tuesday",type:"Teaching",text:"Tuesday teaching 📣\n\nMost people's content doesn't convert because they write FOR their audience instead of WITH them.\n\nYour best content isn't what you think they need to hear.\nIt's the exact words they used in their last DM to you.\n\nGo mine your DMs for content this week. You're welcome. 😉"},
+    {day:"Wednesday",ritual:"Win Wednesday",type:"Celebration",text:"WIN WEDNESDAY — marketing edition 🏆📣\n\nDrop a campaign win, engagement win, lead win, or content win from this week.\n\nNumbers optional. Vibe mandatory. GO."},
+    {day:"Thursday",ritual:"Hot Take Thursday",type:"Discussion",text:"Marketing Hot Take Thursday 🔥\n\nAI is making most people's content WORSE.\n\nNot because the writing is bad — because it's all starting to sound the same.\n\nPersonality and POV are now the actual competitive advantage.\n\nAm I wrong? 👇"},
+    {day:"Friday",ritual:"Fun Friday",type:"Fun",text:"FRIDAY THIS OR THAT 📣\n\nEmail list 📧 or Social media 📱?\nOrganic traffic 🌱 or Paid ads 💰?\nBatch content 📦 or Create daily ✨?\n\nDrop your current strategy combo below! 😂"},
+  ],
+  fitness:[
+    {day:"Monday",ritual:"Movement Monday",type:"Check-in",text:"MOVEMENT MONDAY 💪\n\nWhat are you training this week and what's your ONE health goal to hit before Sunday?\n\nDrop it below. The community is your accountability partner."},
+    {day:"Tuesday",ritual:"Teaching Tuesday",type:"Teaching",text:"Tuesday fitness tip 💪\n\nThe most underrated part of any fitness journey:\n\nNot the program. Not the diet.\nThe story you tell yourself on the days you don't feel like showing up.\n\nYour identity IS your consistency.\n\nWhat do you tell yourself on hard training days? 👇"},
+    {day:"Wednesday",ritual:"Win Wednesday",type:"Celebration",text:"WIN WEDNESDAY — fitness edition 🏆💪\n\nDrop your win this week. Scale win, non-scale win, consistency win — ALL of it counts.\n\nLet's celebrate each other. GO."},
+    {day:"Thursday",ritual:"Hot Take Thursday",type:"Discussion",text:"Fitness Hot Take Thursday 🔥\n\nYou can out-train a bad diet.\nBut you can't out-train a bad mindset.\n\nMost fitness transformations fail in the mind before they fail in the gym.\n\nAgree or disagree? 👇"},
+    {day:"Friday",ritual:"Fun Friday",type:"Fun",text:"FRIDAY THIS OR THAT 💪\n\nMorning workout ☀️ or Evening session 🌙?\nLifting 🏋️ or Cardio 🏃?\nStrict diet 📋 or Intuitive eating 🌱?\n\nDrop your answers and let's see how this community trains! 😂"},
+  ],
+  finance:[
+    {day:"Monday",ritual:"Money Monday",type:"Check-in",text:"MONEY MONDAY 💰\n\nOne question to start your financial week:\n\nWhat's ONE money action you're committing to before Friday?\n\nNot a plan. An action.\n\nDrop it below. Accountability is free. 😉"},
+    {day:"Tuesday",ritual:"Teaching Tuesday",type:"Teaching",text:"Tuesday money lesson 💰\n\nThe gap between where most people are and where they want to be financially:\n\nIt's not information. Everyone has access to information.\n\nIt's the identity shift from 'someone who struggles with money' to 'someone who builds wealth.'\n\nWhen did your money identity start to shift? 👇"},
+    {day:"Wednesday",ritual:"Win Wednesday",type:"Celebration",text:"WIN WEDNESDAY — money edition 🏆💰\n\nDrop your financial win from the last 7 days.\nPaid off a bill. First investment. Hit a savings goal. Closed a sale.\n\nALL of it is worth celebrating. GO."},
+    {day:"Thursday",ritual:"Hot Take Thursday",type:"Discussion",text:"Finance Hot Take Thursday 🔥\n\nThe financial advice industry makes money by keeping you confused.\n\nSimple beats optimised every time when you're starting out:\nSpend less than you earn. Invest the difference. Repeat for decades.\n\nAm I oversimplifying? 👇"},
+    {day:"Friday",ritual:"Fun Friday",type:"Fun",text:"FRIDAY THIS OR THAT 💰\n\nStocks 📊 or Real estate 🏠?\nSave first 🏦 or Invest first 📈?\nBudget app 📱 or Spreadsheet 📋?\n\nDrop your money personality below! 😂"},
+  ],
+  creative:[
+    {day:"Monday",ritual:"Creative Monday",type:"Check-in",text:"CREATIVE MONDAY 🎨\n\nWhat are you creating this week and what's the ONE piece you're committing to finishing?\n\nDrop it below. The community is your accountability squad."},
+    {day:"Tuesday",ritual:"Teaching Tuesday",type:"Teaching",text:"Tuesday creative tip 🎨\n\nThe most successful content creators I know all do this:\n\nThey create for ONE person, not for 'their audience.'\n\nPicture one specific person. Write/film for them.\nEverything else comes from that specificity.\n\nWho's your one person? 👇"},
+    {day:"Wednesday",ritual:"Win Wednesday",type:"Celebration",text:"WIN WEDNESDAY — creator edition 🏆🎨\n\nDrop your creative win this week.\nEngagement up. Piece you're proud of. First paid gig. New client.\n\nALL of it counts here. GO."},
+    {day:"Thursday",ritual:"Hot Take Thursday",type:"Discussion",text:"Creative Hot Take Thursday 🔥\n\nPerfect content that never gets published is worth exactly zero.\n\nDone and shipped beats polished and sitting in drafts every single time.\n\nHow many pieces do you have sitting in drafts right now? Be honest 😂 👇"},
+    {day:"Friday",ritual:"Fun Friday",type:"Fun",text:"FRIDAY THIS OR THAT 🎨\n\nLong form video 🎥 or Short form reels ⚡?\nBatch content 📦 or Create daily ✨?\nStrict aesthetic 🖼️ or Raw and real 📱?\n\nDrop your creative combo and let's see how this community creates! 😂"},
+  ],
+  mindset:[
+    {day:"Monday",ritual:"Mindset Monday",type:"Check-in",text:"MINDSET MONDAY 🧠\n\nOne question for the week ahead:\n\nWhat's the belief that would need to be TRUE for this to be your best week yet?\n\nDrop it below. Plant the seed. 🌱"},
+    {day:"Tuesday",ritual:"Teaching Tuesday",type:"Teaching",text:"Tuesday mindset drop 🧠\n\nMost people treat their inner critic like a problem to solve.\n\nThe shift: treat it like a frightened part of you that needs reassurance, not suppression.\n\nYou don't silence fear. You parent it.\n\nWhat does your inner critic actually need to hear? 👇"},
+    {day:"Wednesday",ritual:"Win Wednesday",type:"Celebration",text:"WIN WEDNESDAY — mindset edition 🏆🧠\n\nDrop a mindset win from this week.\nA fear you faced. A thought pattern you caught. A boundary you held.\n\nThe internal wins count just as much as the external ones. GO."},
+    {day:"Thursday",ritual:"Hot Take Thursday",type:"Discussion",text:"Mindset Hot Take Thursday 🔥\n\nSelf-awareness without action is just sophisticated procrastination.\n\nKnowing your patterns isn't the same as changing them.\nAt some point, insight has to become behaviour.\n\nWhere do you think most people get stuck — insight or action? 👇"},
+    {day:"Friday",ritual:"Fun Friday",type:"Fun",text:"FRIDAY THIS OR THAT 🧠\n\nJournaling 📓 or Meditation 🧘?\nTherapy 🛋️ or Coaching 🎯?\nMorning rituals ☀️ or Evening reflection 🌙?\n\nDrop your mindset toolkit below! Let's see how this community takes care of their brain 😂"},
+  ],
+  parenting:[
+    {day:"Monday",ritual:"Monday Check-in",type:"Check-in",text:"Monday parenting check-in 👶\n\nHonest question — how are you ACTUALLY going into this week?\n\nDrop a number 1-10 and one sentence.\n\nNo performance here. Just real. 🫶"},
+    {day:"Tuesday",ritual:"Teaching Tuesday",type:"Teaching",text:"Tuesday parenting tip 👶\n\nThe biggest shift for parents who feel constantly reactive:\n\nStop trying to manage your child's behaviour and start noticing what NEED is underneath it.\n\nA child acting out is a child communicating.\n\nWhat's the hardest behaviour you're navigating right now? 👇"},
+    {day:"Wednesday",ritual:"Win Wednesday",type:"Celebration",text:"WIN WEDNESDAY — parent edition 🏆👶\n\nDrop a parenting win from this week.\nA connection moment. A boundary that held. A meltdown you navigated calmly.\n\nALL of it counts. You're doing better than you think. GO."},
+    {day:"Thursday",ritual:"Hot Take Thursday",type:"Discussion",text:"Parenting Hot Take Thursday 🔥\n\nParenting guilt is mostly manufactured by an industry that profits from parents feeling inadequate.\n\nYou are not failing. You are human.\n\nWhat do you wish someone had told you earlier as a parent? 👇"},
+    {day:"Friday",ritual:"Fun Friday",type:"Fun",text:"FRIDAY THIS OR THAT 👶\n\nStrict routine 📅 or Go with the flow 🌊?\nScreen time limits 📱 or Screen time freedom 🎮?\nMontessori 🌿 or Traditional schooling 📚?\n\nDrop your parenting approach and let's see how this community parents! 😂"},
+  ],
+  tech:[
+    {day:"Monday",ritual:"Build Monday",type:"Check-in",text:"BUILD MONDAY 💻\n\nWhat are you building, learning, or shipping this week?\n\nDrop your ONE focus. No lists. One thing.\n\nLet's hold each other accountable."},
+    {day:"Tuesday",ritual:"Teaching Tuesday",type:"Teaching",text:"Tuesday tech drop 💻\n\nThe creators and entrepreneurs who will have the biggest advantage in the next 3 years:\n\nNot the ones who use the most AI tools.\nThe ones who understand how to THINK with AI.\n\nPrompt quality > Tool quantity.\n\nWhat's one prompt framework that changed how you use AI? 👇"},
+    {day:"Wednesday",ritual:"Win Wednesday",type:"Celebration",text:"WIN WEDNESDAY — builder edition 🏆💻\n\nDrop what you built, shipped, learned, or automated this week.\n\nNo win too small. Shipped beats perfect. GO."},
+    {day:"Thursday",ritual:"Hot Take Thursday",type:"Discussion",text:"Tech Hot Take Thursday 🔥\n\nMost people are using AI to speed up the creation of mediocre content.\n\nThe real opportunity is using AI to think differently — to challenge assumptions, stress-test ideas, find the gaps.\n\nAre you using AI to produce more or to think better? 👇"},
+    {day:"Friday",ritual:"Fun Friday",type:"Fun",text:"FRIDAY THIS OR THAT 💻\n\nChatGPT 🤖 or Claude ✨?\nNo-code ⚡ or Low-code 💻?\nBuild in public 📣 or Launch quietly 🤫?\n\nDrop your builder preferences below! 😂"},
+  ],
+  realestate:[
+    {day:"Monday",ritual:"Deal Monday",type:"Check-in",text:"DEAL MONDAY 🏠\n\nWhat's your ONE real estate focus this week?\n\nAnalysing a deal. Calling a seller. Doing research on a new market.\n\nDrop it below. Let's hold each other accountable."},
+    {day:"Tuesday",ritual:"Teaching Tuesday",type:"Teaching",text:"Tuesday real estate drop 🏠\n\nThe investors who scale fastest all have this in common:\n\nThey buy the same types of deals in the same markets on repeat.\n\nNovices chase variety. Experts find a niche and go deep.\n\nWhat's your 'boring but profitable' investment strategy? 👇"},
+    {day:"Wednesday",ritual:"Win Wednesday",type:"Celebration",text:"WIN WEDNESDAY — investor edition 🏆🏠\n\nDrop your real estate win this week.\nDeal analysed. Offer made. Deal closed. Property managed. Passive income received.\n\nALL stages count. GO."},
+    {day:"Thursday",ritual:"Hot Take Thursday",type:"Discussion",text:"Real Estate Hot Take Thursday 🔥\n\nWaiting for rates to come down before investing is just fear with a financial explanation.\n\nDeals exist in every market. The investors who win are the ones who learn to find them.\n\nAm I being too harsh? 👇"},
+    {day:"Friday",ritual:"Fun Friday",type:"Fun",text:"FRIDAY THIS OR THAT 🏠\n\nBuy and hold 📈 or Fix and flip 🔨?\nSingle family 🏡 or Multi-family 🏢?\nLocal market 📍 or Long distance 🌍?\n\nDrop your investing style! Let's see how this community builds. 😂"},
+  ],
+};
+
+/* ════════════════════════════════════════════════════
+   STATE
+   ════════════════════════════════════════════════════ */
+let activeIntent = null;
+let activeCat = null;
+let currentIdx = 0;
+let totIdx = 0;
+let pollIdx = 0;
+
+/* ════════════════════════════════════════════════════
+   COPY FUNCTION (execCommand fallback — works everywhere)
+   ════════════════════════════════════════════════════ */
+function copyText(btn, text) {
+  try {
+    const ta = document.createElement('textarea');
+    ta.value = text;
+    ta.style.cssText = 'position:fixed;top:0;left:0;opacity:0;pointer-events:none';
+    document.body.appendChild(ta);
+    ta.focus(); ta.select();
+    document.execCommand('copy');
+    document.body.removeChild(ta);
+    const orig = btn.textContent;
+    btn.textContent = 'Copied!';
+    btn.classList.add('copied');
+    setTimeout(() => { btn.textContent = orig; btn.classList.remove('copied'); }, 2000);
+  } catch(e) {
+    if (navigator.clipboard) {
+      navigator.clipboard.writeText(text).then(() => {
+        const orig = btn.textContent;
+        btn.textContent = 'Copied!';
+        btn.classList.add('copied');
+        setTimeout(() => { btn.textContent = orig; btn.classList.remove('copied'); }, 2000);
+      }).catch(() => alert('Copy failed — please select the text manually.'));
+    }
+  }
+}
+
+/* ════════════════════════════════════════════════════
+   NICHE PILLS
+   ════════════════════════════════════════════════════ */
+function renderNichePills() {
+  const c = document.getElementById('niche-pills');
+  c.innerHTML = '';
+  niches.forEach(n => {
+    const b = document.createElement('button');
+    b.className = 'niche-pill' + (activeNiche === n.id ? ' active' : '');
+    b.textContent = n.label;
+    b.onclick = () => selectNiche(n.id);
+    c.appendChild(b);
+  });
+}
+
+function selectNiche(id) {
+  activeNiche = id;
+  activeIntent = null;
+  activeCat = null;
+  currentIdx = 0;
+  totIdx = 0;
+  pollIdx = 0;
+  const n = niches.find(x => x.id === id);
+  document.getElementById('niche-display').textContent = '✦ ' + n.short;
+  renderNichePills();
+  renderIntentPills();
+  renderCatPills();
+  renderPosts();
+  renderToT();
+  renderPolls();
+  renderRituals();
+}
+
+/* ════════════════════════════════════════════════════
+   FILTER PILLS
+   ════════════════════════════════════════════════════ */
+function getIntents() { return [...new Set((library[activeNiche] || []).map(p => p.intent))]; }
+function getCats() {
+  return [...new Set((library[activeNiche] || []).filter(p => !activeIntent || p.intent === activeIntent).map(p => p.cat))];
+}
+function getFiltered() {
+  return (library[activeNiche] || []).filter(p => {
+    if (activeIntent && p.intent !== activeIntent) return false;
+    if (activeCat && p.cat !== activeCat) return false;
+    return true;
+  });
+}
+
+function renderIntentPills() {
+  const c = document.getElementById('intent-pills');
+  c.innerHTML = '';
+  const make = (label, val) => {
+    const b = document.createElement('button');
+    b.className = 'pill' + (activeIntent === val ? ' active' : '');
+    b.textContent = label;
+    b.onclick = () => { activeIntent = val; activeCat = null; currentIdx = 0; renderIntentPills(); renderCatPills(); renderPosts(); };
+    c.appendChild(b);
+  };
+  make('All', null);
+  getIntents().forEach(i => make(i.charAt(0).toUpperCase() + i.slice(1), i));
+}
+
+function renderCatPills() {
+  const c = document.getElementById('cat-pills');
+  c.innerHTML = '';
+  const cats = getCats();
+  if (activeCat && !cats.includes(activeCat)) activeCat = null;
+  const make = (label, val) => {
+    const b = document.createElement('button');
+    b.className = 'pill cat-pill' + (activeCat === val ? ' active' : '');
+    b.textContent = label;
+    b.onclick = () => { activeCat = val; currentIdx = 0; renderCatPills(); renderPosts(); };
+    c.appendChild(b);
+  };
+  make('All', null);
+  cats.forEach(cat => make(cat, cat));
+}
+
+/* ════════════════════════════════════════════════════
+   POSTS
+   ════════════════════════════════════════════════════ */
+function renderPosts() {
+  const posts = getFiltered();
+  const container = document.getElementById('posts-container');
+  const nav = document.getElementById('nav-area');
+  container.innerHTML = '';
+  if (!posts.length) {
+    container.innerHTML = '<div class="empty">No posts match this filter — try a different combo!</div>';
+    nav.style.display = 'none';
+    return;
+  }
+  if (currentIdx >= posts.length) currentIdx = 0;
+  nav.style.display = 'flex';
+  document.getElementById('nav-count').textContent = (currentIdx + 1) + ' of ' + posts.length;
+  const p = posts[currentIdx];
+  window._curPost = p.text;
+  window._curFollowUp = p.followUp;
+  container.innerHTML = `
+    <div class="card">
+      <div class="card-top">
+        <div style="display:flex;gap:6px;flex-wrap:wrap">
+          <span class="badge">${p.type}</span>
+          <span class="badge-intent">${p.intent}</span>
+        </div>
+        <span class="cat-label">${p.cat}</span>
+      </div>
+      <div class="post-text">${p.text}</div>
+      <div class="best-for">Best for: ${p.best}</div>
+      <div class="gif-pill"><span class="gif-label">GIF idea</span>${p.gif}</div>
+      <div class="skool-hints">
+        <div class="skool-hints-title">💬 Host Follow-Up Comment</div>
+        <div class="skool-hint">${p.followUp}</div>
+      </div>
+      <div class="actions">
+        <button class="btn btn-copy" onclick="copyText(this, window._curPost)">Copy post</button>
+        <button class="btn" onclick="copyText(this, window._curFollowUp)">Copy follow-up</button>
+      </div>
+    </div>`;
+}
+
+function prevPost() { const p = getFiltered(); currentIdx = (currentIdx - 1 + p.length) % p.length; renderPosts(); }
+function nextPost() { const p = getFiltered(); currentIdx = (currentIdx + 1) % p.length; renderPosts(); }
+function showRandom() { const p = getFiltered(); currentIdx = Math.floor(Math.random() * p.length); renderPosts(); }
+
+/* ════════════════════════════════════════════════════
+   THIS OR THAT
+   ════════════════════════════════════════════════════ */
+function renderToT() {
+  const data = totData[activeNiche] || [];
+  const container = document.getElementById('tot-container');
+  if (!data.length) { container.innerHTML = '<div class="empty">No This or That content for this niche yet.</div>'; return; }
+  if (totIdx >= data.length) totIdx = 0;
+  const d = data[totIdx];
+  const fullText = d.title + '\n\n' + d.questions.map((q, i) => (i+1) + '. ' + q).join('\n') + '\n\nDrop your answers below 👇';
+  window._curToT = fullText;
+  window._curToTFollowUp = d.followUp;
+  const items = d.questions.map((q, i) => `<div class="tot-card-item"><div class="tot-num">${i+1}.</div>${q}</div>`).join('');
+  container.innerHTML = `
+    <div class="output-card">
+      <div class="out-title">${d.title}</div>
+      <div class="out-sub" style="margin-bottom:14px">Pick one from each — drop your answers below 👇</div>
+      <div class="tot-grid">${items}</div>
+      <div class="followup-box"><strong>Host follow-up:</strong> ${d.followUp}</div>
+      <div style="display:flex;align-items:center;justify-content:space-between;margin-bottom:14px;flex-wrap:wrap;gap:8px">
+        <span style="font-family:'DM Mono',monospace;font-size:10px;color:var(--text-soft)">${totIdx+1} of ${data.length}</span>
+        <div style="display:flex;gap:6px">
+          <button class="btn" onclick="prevToT()">← Prev</button>
+          <button class="btn" onclick="nextToT()">Next →</button>
+        </div>
+      </div>
+      <div class="out-actions">
+        <button class="btn btn-copy" onclick="copyText(this, window._curToT)">Copy post</button>
+        <button class="btn" onclick="copyText(this, window._curToTFollowUp)">Copy follow-up</button>
+      </div>
+    </div>`;
+}
+function prevToT() { const d = totData[activeNiche] || []; totIdx = (totIdx - 1 + d.length) % d.length; renderToT(); }
+function nextToT() { const d = totData[activeNiche] || []; totIdx = (totIdx + 1) % d.length; renderToT(); }
+
+/* ════════════════════════════════════════════════════
+   POLLS
+   ════════════════════════════════════════════════════ */
+function renderPolls() {
+  const data = pollData[activeNiche] || [];
+  const container = document.getElementById('polls-container');
+  if (!data.length) { container.innerHTML = '<div class="empty">No poll content for this niche yet.</div>'; return; }
+  if (pollIdx >= data.length) pollIdx = 0;
+  const d = data[pollIdx];
+  const optionLines = d.options.map(o => '→ ' + o).join('\n');
+  const fullText = d.intro + '\n\n' + d.question + '\n\n' + optionLines;
+  window._curPoll = fullText;
+  window._curPollFollowUp = d.followUp;
+  const opts = d.options.map(o => `<li>${o}</li>`).join('');
+  container.innerHTML = `
+    <div class="output-card">
+      <div class="out-sub" style="font-style:italic;margin-bottom:10px">${d.intro}</div>
+      <div class="out-title" style="font-size:17px;margin-bottom:14px">${d.question}</div>
+      <ul class="q-list">${opts}</ul>
+      <div class="followup-box"><strong>Host follow-up:</strong> ${d.followUp}</div>
+      <div style="display:flex;align-items:center;justify-content:space-between;margin-bottom:14px;flex-wrap:wrap;gap:8px">
+        <span style="font-family:'DM Mono',monospace;font-size:10px;color:var(--text-soft)">${pollIdx+1} of ${data.length}</span>
+        <div style="display:flex;gap:6px">
+          <button class="btn" onclick="prevPoll()">← Prev</button>
+          <button class="btn" onclick="nextPoll()">Next →</button>
+        </div>
+      </div>
+      <div class="out-actions">
+        <button class="btn btn-copy" onclick="copyText(this, window._curPoll)">Copy post</button>
+        <button class="btn" onclick="copyText(this, window._curPollFollowUp)">Copy follow-up</button>
+      </div>
+    </div>`;
+}
+function prevPoll() { const d = pollData[activeNiche] || []; pollIdx = (pollIdx - 1 + d.length) % d.length; renderPolls(); }
+function nextPoll() { const d = pollData[activeNiche] || []; pollIdx = (pollIdx + 1) % d.length; renderPolls(); }
+
+/* ════════════════════════════════════════════════════
+   WEEKLY RITUALS
+   ════════════════════════════════════════════════════ */
+function renderRituals() {
+  const data = ritualData[activeNiche] || [];
+  const container = document.getElementById('rituals-container');
+  if (!data.length) { container.innerHTML = '<div class="empty">No ritual content for this niche yet.</div>'; return; }
+  window._ritualPosts = data;
+  const allText = data.map(p => '━━━ ' + p.day.toUpperCase() + ': ' + p.ritual + ' ━━━\n\n' + p.text).join('\n\n\n');
+  window._allRituals = allText;
+  const cards = data.map((p, i) => `
+    <div class="ritual-day">
+      <div class="ritual-day-header">
+        <span class="ritual-day-badge">${p.day}</span>
+        <span class="ritual-day-type">${p.ritual}</span>
+      </div>
+      <div class="ritual-post-text">${p.text}</div>
+      <button class="ritual-copy-btn" onclick="copyRitual(this,${i})">Copy this post</button>
+    </div>`).join('');
+  container.innerHTML = `
+    <div style="display:flex;justify-content:space-between;align-items:center;margin-bottom:16px;flex-wrap:wrap;gap:8px">
+      <div style="font-family:'Syne',sans-serif;font-weight:700;font-size:16px;color:var(--text)">Your Ritual Week ✨</div>
+      <button class="btn btn-copy" onclick="copyText(this, window._allRituals)">Copy all 5 posts</button>
+    </div>
+    ${cards}`;
+}
+
+function copyRitual(btn, idx) {
+  const text = window._ritualPosts[idx].text;
+  try {
+    const ta = document.createElement('textarea');
+    ta.value = text;
+    ta.style.cssText = 'position:fixed;top:0;left:0;opacity:0;pointer-events:none';
+    document.body.appendChild(ta);
+    ta.focus(); ta.select();
+    document.execCommand('copy');
+    document.body.removeChild(ta);
+    btn.textContent = 'Copied!';
+    btn.classList.add('copied');
+    setTimeout(() => { btn.textContent = 'Copy this post'; btn.classList.remove('copied'); }, 2000);
+  } catch(e) {}
+}
+
+/* ════════════════════════════════════════════════════
+   PANEL SWITCHING
+   ════════════════════════════════════════════════════ */
+function switchPanel(id) {
+  document.querySelectorAll('.panel').forEach(p => p.classList.remove('visible'));
+  document.getElementById('panel-' + id).classList.add('visible');
+  document.querySelectorAll('.section-tab').forEach((t, i) => {
+    t.classList.toggle('active', ['posts','tot','polls','rituals'][i] === id);
+  });
+}
+
+/* ════════════════════════════════════════════════════
+   INIT
+   ════════════════════════════════════════════════════ */
+renderNichePills();
+renderIntentPills();
+renderCatPills();
+renderPosts();
+renderToT();
+renderPolls();
+renderRituals();
+</script>
+</body>
+</html>
